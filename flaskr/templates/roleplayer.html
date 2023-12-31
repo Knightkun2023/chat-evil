@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>{{_('Roleplayer')}} / ChatGPT API Chat</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='common.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='roleplayer.css') }}">
+    </head>
+    <body>
+        <div class="content">
+            <h2>{{_('Roleplayer')}}</h2>
+            <h3 class="error" id="main_error_message">{{ message }}</h3>
+            <div id="detail_panel" class="detail_panel">
+                <table>
+                    <tr><th colspan="2">{{_('Roleplayer Name')}}</th></tr>
+                    <tr>
+                        <td colspan="2"><input id="roleplayer_name" type="text"><br>
+                            <span id="invalidate_roleplayer_name" class="error">&nbsp; </span></td>
+                    </tr>
+                    <tr>
+                        <th>{{_('Roleplayer Icon')}}</th>
+                        <td>
+                            <button id="set_icon_button">{{_('Icon Setting')}}</button>
+                        </td>
+                    </tr>
+                    <tr><th colspan="2">{{_('Roleplayer Memo')}}</th></tr>
+                    <tr>
+                        <td colspan="2"><input type="text" id="memo" class=""></input><br>
+                            <span id="invalidate_memo" class="error">&nbsp; </span></td>
+                    </tr>
+                    {% if roleplayer.is_owner %}
+                    <tr>
+                        <th class="w-25">{{_('This prompt is locked?')}}</th>
+                        <td><input id="is_edit_locked" type="checkbox"></td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <th class="w-25">{{_('Everyone can see?')}}</th>
+                        <td><input id="is_viewable_by_everyone" type="checkbox" checked></td>
+                    </tr>
+                    <tr>
+                        <th class="w-25">{{_('Everyone can edit?')}}</th>
+                        <td><input id="is_editable_by_everyone" type="checkbox" ></td>
+                    </tr>
+                    {% if roleplayer %}
+                    <tr><th colspan="2">{{_('Owner User')}}</th></tr>
+                    <tr>
+                        <td colspan="2"><span>{{ roleplayer.owner_user }}</span></td>
+                    </tr>
+                    <tr><th colspan="2">{{_('Last Updated')}}</th></tr>
+                    <tr>
+                        <td colspan="2"><span>{{ roleplayer.Roleplayers.updated_time | get_display_time }}</span></td>
+                    </tr>
+                    <tr><th colspan="2">{{_('Updated User')}}</th></tr>
+                    <tr>
+                        <td colspan="2"><span>{{ roleplayer.updated_user }}</span></td>
+                    </tr>
+                    {% endif %}
+                </table>
+                {% if roleplayer %}
+                <input id="roleplayer_id" type="hidden" value="{{ roleplayer.Roleplayers.roleplayer_id }}">
+                <input id="revision" type="hidden" value="{{ roleplayer.Roleplayers.revision }}">
+                <input id="updated_time" type="hidden" value="{{ roleplayer.Roleplayers.updated_time }}">
+                {% endif %}
+                <input id="csrf_token" type="hidden" value="{{ csrf_token }}">
+            </div>
+            <div class="center">
+                {% if not roleplayer %}
+                <button id="register_button" class="register">{{_('Register Roleplayer')}}</button>
+                {% elif roleplayer.is_editable %}
+                <button id="register_button">{{_('Edit Roleplayer')}}</button>
+                {% endif %}
+                {% if roleplayer %}
+                <button id="revert_button">{{_('Revert')}}</button>
+                <button id="delete_button">{{_('Delete Roleplayer')}}</button>
+                {% endif %}
+            </div>
+        </div>
+        <div id="moderation_modal" class="modal"></div>
+    </body>
+    {% include 'parts/common_scripts.html' %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+    <script type="text/javascript">
+        var detail_data = JSON.parse({{ serialized_json | default('{}') | tojson | safe }});
+    </script>
+    <script type="text/javascript" src="{{ url_for('static', filename='common.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='roleplayer.js') }}"></script>
+</html>

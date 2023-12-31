@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>{{_('Registration Code List')}} / ChatGPT API Chat</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-5.3.0.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='common.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='registration_code.css') }}">
+    </head>
+    <body>
+        <div class="content">
+            <h2>{{_('Registration Code List')}}</h2>
+            <div class="list_panel">
+                {% if not registration_codes %}
+                    {{_('Registration code has not been registered yet.')}}
+                {% else %}
+                <table>
+                    <tr>
+                        <th>{{_('Registration Code')}}</th>
+                        <th>{{_('Remarks')}}</th>
+                        <th>{{_('Is Used')}}</th>
+                        <th>{{_('Name of the user who Added this')}}</th>
+                        <th>{{_('Issuing Time')}}</th>
+                        <th>{{_('Expiration Time')}}</th>
+                        <th>{{_('Roles')}}</th>
+                    </tr>
+                    {% for code in registration_codes %}
+                    <tr>
+                        <td>{{ code.registration_code }}</td>
+                        <td>{{ code.remarks }}</td>
+                        <td>{{ code.is_used }}</td>
+                        <td>{{ code.user_id }}</td>
+                        <td>{{ code.issuing_time | get_display_time }}</td>
+                        <td>{{ code.expiration_time | get_display_time }}</td>
+                        <td>{{ code.roles }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                {% endif %}
+            </div>
+            <div>
+                <button onclick="document.location='/registration_code'">{{_('Add Code')}}</button>
+            </div>
+        </div>
+    </body>
+    {% include 'parts/common_scripts.html' %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='bootstrap-5.3.0.bundle.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='registration_code.js') }}"></script>
+    <script src="https://kit.fontawesome.com/00a14eb7c5.js" crossorigin="anonymous"></script>
+</html>

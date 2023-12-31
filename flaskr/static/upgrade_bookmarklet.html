@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>ブックマークレットをアップグレードする</title>
+        <style>
+            /* モーダルのスタイル */
+            #modal {
+                display: none;
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                padding: 20px;
+                background-color: white;
+                border: 1px solid #ddd;
+                z-index: 1000;
+            }
+            /* 背景のスタイル */
+            #overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 999;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <h3>2023/09/15以前のブックマークレットを入力してください。</h3>
+            <textarea id="ta1" style="width:100%;height:5rem;"></textarea>
+            <div style="text-align:center;">
+                <button id="upgrade" style="width:100%; height:3rem; font-size: 1.5rem;">↓↓↓ アップグレードする ↓↓↓</button>
+            </div>
+            <h3>2023/09/16現在のブックマークレット（Ver.2023091601）</h3>
+            <textarea id="ta2" style="width:100%;height:5rem;" onclick="this.select()" readonly></textarea>
+            <div style="text-align:center;">
+                <button id="clear_ta" style="width:100%; height:3rem; font-size: 1.5rem;">クリアする</button>
+            </div>
+        </div>
+        <!-- モーダルとオーバーレイ -->
+        <div id="overlay"></div>
+        <div id="modal">
+            ブックマークレットがアップグレードされました！
+            <button onclick="closeModal()">閉じる</button>
+        </div>
+    </body>
+    <script>
+        const upgradeButton = document.getElementById('upgrade');
+        const clearButton = document.getElementById('clear_ta');
+        const modal = document.getElementById('modal');
+        const overlay = document.getElementById('overlay');
+
+        function closeModal() {
+            modal.style.display = 'none';
+            overlay.style.display = 'none';
+        }
+
+        // イベントリスナーを追加
+        upgradeButton.addEventListener('click', function() {
+            // textarea "ta1" の内容を取得
+            const ta1Content = document.getElementById('ta1').value;
+
+            // 置換処理
+            const replacedContent = ta1Content.replace(/stroke-width="1\.5"/g, 'stroke-width="2"')
+                .replace(/javascript:\(function\(\)\s*{/g, 'javascript:(function(){/*ver.2023091601*/');
+
+            // 置換した内容を textarea "ta2" に出力
+            document.getElementById('ta2').value = replacedContent;
+
+            // モーダルとオーバーレイを表示
+            modal.style.display = 'block';
+            overlay.style.display = 'block';
+        });
+        clearButton.addEventListener('click', function() {
+            document.getElementById('ta1').value = '';
+            document.getElementById('ta2').value = '';
+        });
+    </script>
+</html>

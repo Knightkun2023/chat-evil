@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>{{_('Systme Prompot List')}} / ChatGPT API Chat</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='common.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='system_prompt.css') }}">
+    </head>
+    <body>
+        <div class="content">
+            <div class="list_panel">
+                {% if not system_prompts %}
+                    {{_('System prompt has not been registered yet.')}}
+                {% else %}
+                <table>
+                    <tr>
+                        <th>{{_('Prompt Name')}}</th>
+                        <th>{{_('Owner User')}}</th>
+                        <th>{{_('My Prompt')}}</th>
+                        <th>{{_('Everyone can edit?')}}</th>
+                        <th>{{_('Last Updated')}}</th>
+                        <th>{{_('Last Updated User')}}</th>
+                        <th>{{_('Detail')}}</th>
+                    </tr>
+                    {% for prompt, owner_name, updated_name, is_owner in system_prompts %}
+                    <tr>
+                        <td>{{ prompt.prompt_name }}</td>
+                        <td>{{ owner_name }}</td>
+                        <td>{{ is_owner }}</td>
+                        <td>{{ prompt.is_editable_by_everyone }}</td>
+                        <td>{{ prompt.updated_time | get_display_time }}</td>
+                        <td>{{ updated_name }}</td>
+                        <td><button class="detail_button" prompt_id="{{ prompt.prompt_id }}">{{_('Detail')}}</button></td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                {% endif %}
+            </div>
+            <div>
+                <button onclick="document.location='/prompt/'">{{_('Add System Prompt')}}</button>
+            </div>
+        </div>
+    </body>
+    {% include 'parts/common_scripts.html' %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='common.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='system_prompt_list.js') }}"></script>
+</html>

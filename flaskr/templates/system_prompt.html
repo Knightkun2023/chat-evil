@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>{{_('System Prompt')}} / ChatGPT API Chat</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-5.3.0.min.css') }}">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='common.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='moderation_table.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='system_prompt.css') }}">
+    </head>
+    <body>
+        <div class="content">
+            <h2>{{_('System Prompt')}}</h2>
+            <h3 class="error" id="main_error_message">{{ main_error_message }}</h3>
+            <div id="detail_panel" class="detail_panel">
+                <table>
+                    <tr><th colspan="2">{{_('Prompt Name')}}</th></tr>
+                    <tr>
+                        <td colspan="2"><input id="prompt_name" type="text"><br>
+                            <span id="invalidate_prompt_name" class="error">&nbsp; </span></td>
+                    </tr>
+                    <tr><th colspan="2">{{_('Prompt Content')}}</th></tr>
+                    <tr>
+                        <td colspan="2"><textarea id="prompt_content" class="prompt_editor"></textarea><br>
+                            <span id="invalidate_prompt_content" class="error">&nbsp; </span></td>
+                    </tr>
+                    {% if system_prompt.is_owner %}
+                    <tr>
+                        <th class="w-25">{{_('This prompt is locked?')}}</th>
+                        <td><input id="is_edit_locked" type="checkbox"></td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <th class="w-25">{{_('Everyone can see?')}}</th>
+                        <td><input id="is_viewable_by_everyone" type="checkbox" checked></td>
+                    </tr>
+                    <tr>
+                        <th class="w-25">{{_('Everyone can edit?')}}</th>
+                        <td><input id="is_editable_by_everyone" type="checkbox" ></td>
+                    </tr>
+                    {% if system_prompt %}
+                    <tr><th colspan="2">{{_('Owner User')}}</th></tr>
+                    <tr>
+                        <td colspan="2"><span>{{ system_prompt.owner_user }}</span></td>
+                    </tr>
+                    <tr><th colspan="2">{{_('Last Updated')}}</th></tr>
+                    <tr>
+                        <td colspan="2"><span>{{ system_prompt.SystemPrompts.updated_time | get_display_time }}</span></td>
+                    </tr>
+                    <tr><th colspan="2">{{_('Updated User')}}</th></tr>
+                    <tr>
+                        <td colspan="2"><span>{{ system_prompt.updated_user }}</span></td>
+                    </tr>
+                    {% endif %}
+                </table>
+                {% if system_prompt %}
+                <input id="prompt_id" type="hidden" value="{{ system_prompt.SystemPrompts.prompt_id }}">
+                <input id="revision" type="hidden" value="{{ system_prompt.SystemPrompts.revision }}">
+                <input id="updated_time" type="hidden" value="{{ system_prompt.SystemPrompts.updated_time }}">
+                {% endif %}
+                <input id="csrf_token" type="hidden" value="{{ csrf_token }}">
+            </div>
+            <div class="center">
+                {% if not system_prompt %}
+                <button id="register_button" class="register">{{_('Register Prompt')}}</button>
+                {% elif system_prompt.is_editable %}
+                <button id="register_button">{{_('Edit Prompt')}}</button>
+                {% endif %}
+                <button id="download_by_text_button">{{_('Download TXT')}}</button>
+                <button id="download_by_md_button">{{_('Download MD')}}</button>
+                <button id="copy_to_clipboard_button">{{_('Copy To Clipboard')}}</button>
+                {% if system_prompt %}
+                <button id="revert_button">{{_('Revert')}}</button>
+                <button id="delete_button">{{_('Delete Prompt')}}</button>
+                {% endif %}
+                <button id="check_moderation">{{_('Check Moderation')}}</button>
+            </div>
+        </div>
+        <div id="moderation_modal" class="modal"></div>
+    </body>
+    {% include 'parts/common_scripts.html' %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='bootstrap-5.3.0.bundle.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+    <script type="text/javascript">
+        var detail_data = JSON.parse({{ serialized_json | default('{}') | tojson | safe }});
+    </script>
+    <script type="text/javascript" src="{{ url_for('static', filename='common.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='moderation_table.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='system_prompt.js') }}"></script>
+    <script src="https://kit.fontawesome.com/00a14eb7c5.js" crossorigin="anonymous"></script>
+</html>

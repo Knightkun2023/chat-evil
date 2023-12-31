@@ -1,0 +1,516 @@
+h1 {
+    position: relative;
+    background:  #dfefff;
+    box-shadow: 0px 0px 0px 5px #dfefff;
+    border: dashed 2px white;
+    padding: 0.2em 0.5em;
+    color: #454545;
+}
+
+h1:after {
+    position: absolute;
+    content: '';
+    left: -7px;
+    top: -7px;
+    border-width: 0 0 15px 15px;
+    border-style: solid;
+    border-color: #fff #fff #abd4ff;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15);
+}
+
+div {
+    margin: 0;
+    padding: 0;
+    vertical-align: middle;
+}
+
+/* 上部固定領域のスタイル */
+.top-fixed {
+    position: fixed;
+    top: 0;
+    width: 80%;
+    height: 2.5rem;
+    margin: 0 10%;
+    background-color: lightblue;
+}
+
+/* 下部固定領域のスタイル */
+.bottom-fixed {
+    position: fixed;
+    bottom: 0;
+    width: 80%;
+    height: 110px;
+    margin: 0 10%;
+    /* background-color: lightgreen; */
+}
+
+/* 中央スクロール領域のスタイル */
+.scrollable-content {
+    position: absolute;
+    top: 2.5rem; /* 上部固定領域の高さを考慮 */
+    bottom: 110px; /* 下部固定領域の高さを考慮 */
+    width: 80%;
+    margin: 0 10%;
+    font-size: 1.0rem;
+    overflow-y: auto; /* 上下方向のスクロールを有効にする */
+    background-color: white;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+/* #inputbox>div {
+    margin: auto;
+    width: 80%;
+    vertical-align: middle;
+} */
+
+.message-block {
+    position: relative;
+    display: flex;
+    margin: 4px 0;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+#contents_field .user {
+    /* background-color:rgba(160, 255, 160, 0.15); */
+    padding-left: 20px;
+    padding-right: 10px;
+    /* margin-left: auto; */
+    justify-content: flex-end; /* ユーザのメッセージを右寄せにする */
+}
+
+#contents_field .assistant {
+    /* background-color:rgba(160, 160, 255, 0.15); */
+    padding-left: 10px;
+    padding-right: 20px;
+    /* margin-right: auto; */
+    justify-content: flex-start; /* ユーザのメッセージを左寄せにする */
+}
+
+.says {
+    position: relative;
+    max-width: 66%;
+    display: flex;
+    flex-wrap: wrap;
+    border-radius: 12px;
+    margin: 0 !important;
+    line-height: 1.5;
+    padding: 1rem 1.5rem;
+}
+
+.user .says {
+    max-width: 76%;
+    background:rgb(180, 255, 159);
+    text-align: left;
+    padding-right: 2.5rem;
+}
+
+.assistant .says {
+    background:rgb(155, 232, 255);
+    text-align: left;
+}
+
+textarea.says {
+    resize: none;
+    width: 66%;
+}
+
+#content_input {
+    /* margin-left: auto; */
+}
+
+.form-style button {
+    width: 8rem;
+    height: 2rem;
+    margin: 1px 0 1px 0.8rem;
+}
+
+.form-style input[type="text"] {
+    width: 32rem;
+    height: 2rem;
+}
+
+.form-style textarea {
+    resize: both; /* 手動リサイズを許可 */
+    min-height: 100px; /* 高さの最小値を指定（任意） */
+    font-size: 1.6rem;
+    height: 104px;
+    width: 94%;
+}
+
+button {
+    margin: auto 1rem;
+}
+
+.contents_bottom_padding {
+    height: 2rem;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+}
+
+#btn_submit.div-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 76px; /* ボタンの幅 */
+    height: 76px; /* ボタンの高さ */
+    border-radius: 50%; /* ボタンを丸くする */
+    background-color: #a6ee90; /* ボタンの背景色 */
+    color: #ffffff; /* ボタンのテキスト色 */
+    font-size: 0.9rem; /* ボタンのテキストサイズ */
+    margin-left: -20px;
+    cursor: pointer;
+    border: 2px solid #5c9354;
+    z-index: 10;
+}
+
+#btn_submit.div-button:active {
+    background-color: #8bcc77; /* ボタンの背景色 */
+    /* -webkit-transform: translateY(4px);
+    transform: translateY(4px); */
+    -webkit-transform: translate(3px, 3px);
+    transform: translateY(3px, 3px);
+    border-bottom: none;
+}
+
+#btn_submit.div-button.moderation-color-warn {
+    background-color: #FFC966; /* ボタンの背景色 */
+    color: #ffffff; /* ボタンのテキスト色 */
+    border: 2px solid #DDA044;
+}
+
+#btn_submit.div-button.moderation-color-warn:active {
+    background-color: #EEB055; /* ボタンの背景色 */
+}
+
+#btn_submit.div-button.moderation-color-critical {
+    background-color: #FF0000; /* ボタンの背景色 */
+    color: #ffffff; /* ボタンのテキスト色 */
+    border: 2px solid #BB0000;
+}
+
+#btn_submit.div-button.moderation-color-critical:active {
+    background-color: #DD0000; /* ボタンの背景色 */
+}
+
+#btn_submit.div-button.moderation-color-error {
+    background-color: #D0D0D0; /* ボタンの背景色 */
+    color: #ffffff; /* ボタンのテキスト色 */
+    border: 2px solid #808080;
+}
+
+#btn_submit.div-button.moderation-color-error:active {
+    background-color: #A0A0A0; /* ボタンの背景色 */
+}
+
+#btn_submit.div-button.moderation-color-white {
+    background-color: white; /* ボタンの背景色 */
+}
+
+#btn_continue.div-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 76px; /* ボタンの幅 */
+    height: 76px; /* ボタンの高さ */
+    border-radius: 50%; /* ボタンを丸くする */
+    background-color: #ffaaff; /* ボタンの背景色 */
+    color: #ffffff; /* ボタンのテキスト色 */
+    font-size: 0.9rem; /* ボタンのテキストサイズ */
+    margin-left: -10px;
+    cursor: pointer;
+    border: 2px solid #dd33dd;
+}
+
+#btn_continue.div-button:active {
+    background-color: #ff77ee; /* ボタンの背景色 */
+    /* -webkit-transform: translateY(4px);
+    transform: translateY(4px); */
+    -webkit-transform: translate(3px, 3px);
+    transform: translateY(3px, 3px);
+    border-bottom: none;
+}
+
+.button-icon {
+    /* アイコンのスタイルを設定 */
+    font-size: 28px;
+}
+
+.button-text {
+    text-align: center; /* テキストを中央に配置 */
+}
+
+.toggle {
+    display: inline-block;
+    position: relative;
+    width: 48px;
+    height: 34px;
+/*    margin: 40px 60px;*/
+    border-radius: 36px;
+    overflow: hidden;
+    cursor: pointer;
+}
+.toggle input[type=checkbox] {
+display: none;
+}
+.toggle:before {
+content: "";
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+display: block;
+background: #e9e9eb;
+-webkit-transition: 0.2s ease-out;
+transition: 0.2s ease-out;
+}
+.toggle:after {
+content: "";
+position: absolute;
+top: 3px;
+left: 3px;
+width: 28px;
+height: 28px;
+display: block;
+border-radius: 36px;
+background: #fff;
+box-shadow: 0 9px 16px -6px rgba(0, 0, 0, 0.3);
+-webkit-transition: 0.2s ease-out;
+transition: 0.2s ease-out;
+}
+.toggle.checked:before {
+background: #35c759;
+}
+.toggle.checked:after {
+left: 18px;
+box-shadow: 0 9px 28px -6px rgba(0, 0, 0, 0.5);
+}
+
+#audioCredit {
+    font-size:smaller;
+}
+
+#btn_voiceRec {
+    background-color: lightgray; /* ボタンの背景色 */
+    color: black;
+}
+
+#btn_voiceRec:active {
+    background-color: #ff4e4e; /* ボタンの背景色 */
+    color: white;
+}
+
+.img-area {
+    position: relative;
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+}
+
+img.assistant-img {
+    width: 96px;
+    height: 96px;
+    margin-right: 4px;
+    border-radius: 12%;
+}
+
+.img-special-icon {
+    display: none;
+    position: absolute;
+    top: 76px;
+    right: 6px;
+    font-size: medium;
+    color: hsl(60, 100%, 50%);
+}
+
+.img-google-icon {
+    display: none;
+    position: absolute;
+    top: 76px;
+    right: 6px;
+    font-size: larger;
+    color: hsl(5, 81%, 56%);
+}
+
+.special-model .img-special-icon {
+    display: inline;
+}
+
+.gemini-model .img-google-icon {
+    display: inline;
+}
+
+@media(max-width:400px){
+    img.assistant-img {
+        width: 48px;
+        height: 48px;
+    }
+}
+
+.message-edit-icon {
+    display: inline;
+    opacity: 0;
+    color: gray;
+    position: absolute;
+    right: 6px;  /* こちらの値は必要に応じて調整してね */
+    top: 6px; /* この値も調整が必要かもしれないよ */
+    font-size: medium;
+}
+
+.icon-active {
+    opacity: 1;
+}
+
+.message-copy-icon {
+    display: inline;
+    color: lightpink;
+    position: absolute;
+    right: 6px;  /* こちらの値は必要に応じて調整してね */
+    bottom: 6px; /* この値も調整が必要かもしれないよ */
+    font-size: large;
+}
+
+.message-resay-icon {
+    display: inline;
+    color: lightpink;
+    position: absolute;
+    right: 26px;  /* こちらの値は必要に応じて調整してね */
+    bottom: 6px; /* この値も調整が必要かもしれないよ */
+    font-size: medium;
+}
+
+.warning .message-copy-icon, .critical .message-copy-icon {
+    right: 33px;  /* こちらの値は必要に応じて調整してね */
+}
+
+.warning .message-resay-icon, .critical .message-resay-icon {
+    right: 54px;  /* こちらの値は必要に応じて調整してね */
+}
+
+.warn-icon {
+    display: none;
+    position: absolute;
+    right: 3px;  /* こちらの値は必要に応じて調整してね */
+    bottom: 3px; /* この値も調整が必要かもしれないよ */
+    font-size: x-large;
+}
+
+.warning .warn-icon {
+    display: inline;
+    color: orange;
+}
+
+.critical .warn-icon {
+    display: inline;
+    color: red;
+}
+
+#setting_button {
+    position: absolute;
+    display: inline;
+    right: 3px;  /* こちらの値は必要に応じて調整してね */
+    bottom: 3px; /* この値も調整が必要かもしれないよ */
+    font-size: x-large;
+}
+
+#setting_panel {
+    position: absolute;
+    width: 600px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+#setting_panel .setting-row {
+    margin-bottom: 1rem;
+}
+
+@media(max-width:600px){
+    img.assistant-img {
+        width: 100%;
+    }
+}
+
+.btn-close-setting-panel {
+    position: absolute;
+    right: 4px;  /* こちらの値は必要に応じて調整してね */
+    top: 3px; /* この値も調整が必要かもしれないよ */
+    font-size: x-large;
+}
+
+.panel-component {
+    text-align: left;
+    padding-left: 10px;
+}
+.panel-component.label {
+    padding-left: 10%;
+}
+
+.p-c-w-31 {
+    width: 33%;
+}
+
+.p-c-w-32 {
+    width: 66%;
+}
+
+#system_prompt_panel {
+    position: absolute;
+    width: 90%;
+    height: 90%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #dfd;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+#work_system_prompt {
+    width: 100%;
+    min-height: 300px;
+}
+
+#word_replace_panel {
+    position: absolute;
+    width: 90%;
+    height: 90%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #dfd;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+#word_replace_panel table {
+    margin: 1rem auto;
+}
+
+#word_replace_panel table input[type=text] {
+    width: 16rem;
+    
+}
+
+.image-container {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+.image-container img {
+    flex: 0 0 auto;
+}
+
+.image-container .selected-image {
+    border: 4px solid blue;
+}

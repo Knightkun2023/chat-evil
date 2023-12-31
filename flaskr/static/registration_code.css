@@ -1,0 +1,22 @@
+body, .content {
+    margin: 0;
+    width: 100%;
+    text-align: center;
+}
+
+.list_panel {
+    margin: 0 auto;
+    min-width: 400px;
+    width: 100%;
+    text-align: center;
+}
+
+.list_panel table {
+    border-width: 1px;
+    border-color: black;
+}
+
+.error {
+    color: red;
+    font-size:0.9rem;
+}

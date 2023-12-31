@@ -1,0 +1,59 @@
+#chat_list_area {
+    width: 60%;
+    text-align: left;
+    margin: 0 auto 0 auto;
+}
+span.chat-link {
+    display: inline-block; /* block要素やinline-block要素にする必要がある */
+    width: 80%; /* 任意の幅を設定 */
+    white-space: nowrap; /* 折り返しを禁止する */
+    overflow: hidden; /* コンテンツがボックスを超えた場合に隠す */
+    text-overflow: ellipsis; /* ... で表示 */
+}
+div.chat-buttons {
+    display: inline-block; /* block要素やinline-block要素にする必要がある */
+    width: 20%; /* 任意の幅を設定 */
+    white-space: nowrap; /* 折り返しを禁止する */
+    overflow: hidden; /* コンテンツがボックスを超えた場合に隠す */
+    text-overflow: ellipsis; /* ... で表示 */
+}
+
+div.chat-content {
+    font-size: 0.8rem;
+}
+
+div.chat-record {
+    border-bottom: 2px solid lightgray;
+}
+
+input.chat-name-edit {
+    border: none;
+}
+
+a.chat-name {
+    text-decoration: none;
+}
+
+.chat-time {
+    font-size: small;
+    margin-left: 0.5rem;
+}
+
+@media(max-width:1200px) {
+    #chat_list_area {
+        width: 100%;
+        padding: 4px 10px;
+    }
+}
+
+@media(max-width:420px) {
+    span.chat-link {
+        display: block; /* block要素やinline-block要素にする必要がある */
+        width: 100%; /* 任意の幅を設定 */
+    }
+    div.chat-buttons {
+        display: block; /* block要素やinline-block要素にする必要がある */
+        width: 100%; /* 任意の幅を設定 */
+        text-align: center;
+    }
+}

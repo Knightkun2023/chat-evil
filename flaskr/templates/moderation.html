@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>{{_('Moderation API')}} / {{_('ChatGPT API Chat')}}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='common.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='moderation_table.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='check_moderation.css') }}">
+    </head>
+    <body>
+        <div class="content">
+            <h2>{{_('Moderation API')}} （{{ user_name }}）</h2>
+            <h3 class="error" id="main_error_message">{{ main_error_message }}</h3>
+            <div id="detail_panel" class="detail_panel">
+                <table>
+                    <tr><th colspan="2">{{_('Prompt Content')}}</th></tr>
+                    <tr>
+                        <td colspan="2"><textarea id="prompt_content" class="prompt_editor"></textarea><br>
+                            <span id="invalidate_prompt_content" class="error">&nbsp; </span></td>
+                    </tr>
+                </table>
+                <input id="csrf_token" type="hidden" value="{{ csrf_token }}">
+            </div>
+            <div>
+                <fieldset>
+                    <legend>{{_('Select Moderation Model:')}}</legend>
+                    <ul>
+                        <li>
+                            <input type="radio" name="moderation-model" value="1" id="moderation-model-latest" checked>
+                            <label for="moderation-model-latest">text-moderation-latest</label>
+                        </li>
+                        <li>
+                            <input type="radio" name="moderation-model" value="2" id="moderation-model-stable">
+                            <label for="moderation-model-stable">text-moderation-stable</label>
+                        </li>
+                    </ul>
+                  </fieldset>
+            </div>
+            <div class="center">
+                <button id="check_moderation" class="register">{{_('Check Moderation')}}</button>
+                <button id="remove_wastes">{{_('Cleanup Prompt')}}</button>
+                <button id="download_by_text_button">{{_('Download TXT')}}</button>
+                <button id="download_by_md_button">{{_('Download MD')}}</button>
+                <button id="copy_to_clipboard_button">{{_('Copy To Clipboard')}}</button>
+            </div>
+        </div>
+    </body>
+    {% include 'parts/common_scripts.html' %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='common.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='moderation_table.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='check_moderation.js') }}"></script>
+</html>

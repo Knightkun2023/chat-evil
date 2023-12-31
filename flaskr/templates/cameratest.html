@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera Access</title>
+    <style>
+        .success {
+            color: green;
+        }
+        .failure {
+            color: red;
+        }
+        .face_image {
+            width: 96px;
+        }
+    </style>
+</head>
+<body>
+
+<form id="upload-form">
+    <input type="file" accept="image/*" capture="camera" id="camera-input" name="image">
+    <button type="submit">Upload</button>
+</form>
+
+<div>
+    <span id="result_message"></span>
+</div>
+
+<div>
+    <h3>サーバに保存されたファイル</h3>
+    {% for url in image_urls %}
+        <img src="{{ url }}" class="face_image">
+    {% endfor %}
+</div>
+
+<div><button onclick="location.reload();">リロード</button></div>
+
+<script>
+document.getElementById('upload-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    let messageSpan = document.getElementById('result_message');
+    messageSpan.innerText = "";
+    messageSpan.classList.remove('success', 'failure');
+
+    var formData = new FormData();
+    formData.append('image', document.getElementById('camera-input').files[0]);
+
+    fetch('/test/camera/upload', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        messageSpan.classList.add('success');
+        messageSpan.innerText = "Success!";
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        messageSpan.classList.add('failure');
+        messageSpan.innerText = "Failure.";
+    });
+});
+</script>
+
+</body>
+</html>

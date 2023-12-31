@@ -1,0 +1,26 @@
+.char-count::before {
+    content: 'chars: ';
+}
+
+.token-count::before {
+    content: 'tokens: ';
+}
+
+#moderation_panel {
+    margin-bottom: 1rem;
+}
+
+div.editor-toolbar>a,
+div.editor-toolbar>i {
+    width: 40px;
+    height: 40px;
+    font-size: 36px;
+}
+
+div.editor-toolbar>a[title="Moderation"] {
+    background-color: #ff9b4e;
+}
+
+.CodeMirror, .CodeMirror-scroll {
+	min-height: 160px;
+}

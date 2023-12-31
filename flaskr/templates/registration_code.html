@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>{{_('Registration Code')}} / ChatGPT API Chat</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-5.3.0.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='common.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='registration_code.css') }}">
+    </head>
+    <body>
+        <div class="content">
+            <h2>{{_('Registration Code')}}</h2>
+            <div class="detail_panel">
+                <table>
+                    <tr>
+                        <th>{{_('Registration Code')}}</th>
+                        <td><input id="registration_code"><br>
+                            <span id="invalidate_registration_code" class="error">&nbsp; </span></td>
+                    </tr>
+                    <tr>
+                        <th>{{_('Remarks')}}</th>
+                        <td><input id="remarks"><br>
+                            <span id="invalidate_remarks" class="error">&nbsp; </span></td>
+                    </tr>
+                    <tr>
+                        <th>{{_('Expiration Time')}}</th>
+                        <td><input id="expiration_time"><br>
+                            <span id="invalidate_expiration_time" class="error">&nbsp; </span></td>
+                    </tr>
+                    <tr>
+                        <th>{{_('Role')}}</th>
+                        <td><input id="roles" value="0"><br>
+                            <span id="invalidate_roles" class="error">&nbsp; </span></td>
+                    </tr>
+                </table>
+                <input id="csrf_token" type="hidden" value="{{ csrf_token }}">
+            </div>
+            <div>
+                <button id="register_button">{{_('Add Code')}}</button>
+            </div>
+        </div>
+    </body>
+    {% include 'parts/common_scripts.html' %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='bootstrap-5.3.0.bundle.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='registration_code.js') }}"></script>
+    <script src="https://kit.fontawesome.com/00a14eb7c5.js" crossorigin="anonymous"></script>
+</html>

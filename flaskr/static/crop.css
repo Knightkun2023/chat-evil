@@ -1,0 +1,38 @@
+.container {
+    text-align: center;
+}
+.center {
+    text-align: center;
+    margin: 0 auto;
+}
+.face_image {
+    width: 96px;
+}
+.hide {
+    visibility: hidden;
+}
+.view {
+    visibility: show;
+}
+
+#image_area {
+    width: 100%;
+    height: 400px
+}
+
+#loading_area {
+    display: flex;         /* Flexbox コンテナとして設定 */
+    justify-content: center; /* 水平方向の中央揃え */
+    align-items: center;     /* 垂直方向の中央揃え */
+    border: 1px solid #ccc;  /* 視覚的にエリアを確認しやすくするための枠線 */
+    width: 100%;
+    height: 100%;
+}
+
+#load_image {
+    display: none;
+}
+
+#rotationSlider {
+    width: 60%;
+}
