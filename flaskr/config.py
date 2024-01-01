@@ -34,3 +34,6 @@ SESSION_TYPE='filesystem'
 ### ログイン関連
 # 登録コードのデフォルトの有効期限（分）
 EXPIRATION_MINUTES=1440*3  # 3日間
+
+# デフォルトの顔
+DEFAULT_ASSISTANT_PIC='/static/faces/20231231181229555.png'

@@ -7,7 +7,7 @@ from .utils.moderation_commons import code_moderation_json, check_moderation_mai
 import openai, json, logging, os, glob, uuid
 from sqlalchemy import func, desc
 from datetime import datetime
-from .chat import is_positive_integer, cleanup_wavs, is_system_prompt_file, readSystemPrompot, makeSystemPrompot, replace_for_voice, default_assistant_pic
+from .chat import is_positive_integer, cleanup_wavs, is_system_prompt_file, readSystemPrompot, makeSystemPrompot, replace_for_voice
 from .models.chat_model import ChatModel
 from pprint import pformat
 
@@ -363,7 +363,7 @@ def chat2():
             userSeq = user_message.seq
         assistantSeq = assistant_message.seq
         if not image_url:
-            image_url = default_assistant_pic
+            image_url = app.config['DEFAULT_ASSISTANT_PIC']
 
         app_logger.debug(f'@@@@@@@@@@ OpenAI API Response: {response}')
 

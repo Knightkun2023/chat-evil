@@ -8,8 +8,6 @@ import openai, json, logging, os, glob, uuid
 from sqlalchemy import func, desc
 from datetime import datetime
 
-default_assistant_pic='/static/faces/20231231181229555.png'
-
 @app.route('/chat', methods=['POST'])
 @login_required
 def chat():
@@ -361,7 +359,7 @@ def chat():
             userSeq = user_message.seq
         assistantSeq = assistant_message.seq
         if not image_url:
-            image_url = default_assistant_pic
+            image_url = app.config['DEFAULT_ASSISTANT_PIC']
 
         print(f'@@@@@@@@@@ OpenAI API Response: {response}')
 
@@ -739,7 +737,7 @@ def index():
 
         image_url = chatInfo.assistant_pic_url
         if not image_url:
-            image_url=default_assistant_pic
+            image_url = app.config['DEFAULT_ASSISTANT_PIC']
         chat_history_list = [{'role': ch.role, 'content': ch.content, 'image_url': image_url if 'assistant' == ch.role else '', 'moderation': ch.moderation_color, 'seq': ch.seq, 'model_name': get_model_name_by_id(ch.model_id)} for ch in chat_history]
         chat_history_list.pop(0)  # 先頭のシステムプロンプトを削除
         chat_name = chatInfo.chat_name
