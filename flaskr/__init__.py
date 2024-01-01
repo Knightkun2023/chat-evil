@@ -8,6 +8,7 @@ import os
 app = Flask(__name__)
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config.from_pyfile('config.py')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 app.config['REMOTE_URL'] = os.environ['REMOTE_URL']
 CORS(app, resources={

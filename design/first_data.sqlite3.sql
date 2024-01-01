@@ -13,8 +13,8 @@ VALUES (
     '初回登録用',
     0,
     0,
-    LEFT(DATE_FORMAT(NOW(), '%Y%m%d%H%i%s%f'), 17),
-    LEFT(DATE_FORMAT(NOW() + INTERVAL 1 hour, '%Y%m%d%H%i%s%f'), 17),
+    strftime('%Y%m%d%H%M%S', 'now', '+9 hours') || '000',
+    strftime('%Y%m%d%H%M%S', 'now', '+10 hours') || '000',
     0,
     0
 );
