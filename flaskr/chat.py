@@ -950,6 +950,8 @@ def setup():
     # SQLファイルの内容を読み込む
     with open("./design/create_tables.sqlite3.sql", "r") as file:
         sql_script = file.read()
+    with open("./design/first_data.sql", "r") as file:
+        sql_script = sql_script + "\n" + file.read()
 
     # SQLスクリプトを実行する
     con.executescript(sql_script)
