@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-07-20 19:55+0900\n"
+"POT-Creation-Date: 2024-01-06 18:41+0900\n"
 "PO-Revision-Date: 2023-07-20 18:42+0900\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ja\n"
@@ -16,180 +16,355 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.12.1\n"
+"Generated-By: Babel 2.14.0\n"
 
-#: templates/chatgpt.html:12
+#: translation_js.py:8
+msgid ""
+"Content that expresses, incites, or promotes harassing language towards "
+"any target."
+msgstr "いかなる対象に対しても嫌がらせの言語を表現し、煽動し、促進するコンテンツ。"
+
+#: translation_js.py:9
+msgid ""
+"Harassment content that also includes violence or serious harm towards "
+"any target."
+msgstr "いかなる対象に対しても暴力や重大な害を含む嫌がらせコンテンツ。"
+
+#: translation_js.py:10
+msgid ""
+"Content that expresses, incites, or promotes hate based on race, gender, "
+"ethnicity, religion, nationality, sexual orientation, disability status, "
+"or caste. Hateful content aimed at non-protected groups (e.g., chess "
+"players) is harrassment."
+msgstr "人種、性別などに基づいて憎悪を表現し、煽動し、促進するコンテンツ。"
+
+#: translation_js.py:11
+msgid ""
+"Hateful content that also includes violence or serious harm towards the "
+"targeted group based on race, gender, ethnicity, religion, nationality, "
+"sexual orientation, disability status, or caste."
+msgstr "ヘイトの対象とするグループへの暴力や重大な害を含む憎悪的なコンテンツ。"
+
+#: translation_js.py:12
+msgid ""
+"Content that promotes, encourages, or depicts acts of self-harm, such as "
+"suicide, cutting, and eating disorders."
+msgstr "自殺、自傷行為、摂食障害などの自傷行為の行為を促進、奨励、または描写するコンテンツ。"
+
+#: translation_js.py:13
+msgid ""
+"Content where the speaker expresses that they are engaging or intend to "
+"engage in acts of self-harm, such as suicide, cutting, and eating "
+"disorders."
+msgstr "話者が自殺、自傷行為、摂食障害などの行為を実行するか、実行する意図があると表現するコンテンツ。"
+
+#: translation_js.py:14
+msgid ""
+"Content that encourages performing acts of self-harm, such as suicide, "
+"cutting, and eating disorders, or that gives instructions or advice on "
+"how to commit such acts."
+msgstr "自殺、自傷行為、摂食障害などの行為を実行することを奨励するコンテンツ。"
+
+#: translation_js.py:15
+msgid ""
+"Content meant to arouse sexual excitement, such as the description of "
+"sexual activity, or that promotes sexual services (excluding sex "
+"education and wellness)."
+msgstr "性的な活動の描写、または性的サービスを促進するコンテンツ（性教育と健康に関する情報を除く）。"
+
+#: translation_js.py:16
+msgid "Sexual content that includes an individual who is under 18 years old."
+msgstr "18歳未満の個人が含まれる性的なコンテンツ。"
+
+#: translation_js.py:17
+msgid "Content that depicts death, violence, or physical injury."
+msgstr "死、暴力、身体への傷害を描写するコンテンツ。"
+
+#: translation_js.py:18
+msgid ""
+"Content that depicts death, violence, or physical injury in graphic "
+"detail."
+msgstr "死、暴力、身体への傷害を詳細に描写するコンテンツ。"
+
+#: templates/chat_list.html:16
+msgid "No chat yet."
+msgstr "Chatチャットがありません。"
+
+#: templates/chatgpt.html:16
 msgid "Chat Name"
 msgstr "チャット名"
 
-#: templates/chatgpt.html:13
+#: templates/chatgpt.html:17
 msgid "new chat"
 msgstr "New Chat"
 
-#: templates/chatgpt.html:14
-msgid "clear chat"
-msgstr "Clear Chat"
-
-#: templates/chatgpt.html:15
-msgid "audio"
-msgstr "しゃべる"
-
-#: templates/chatgpt.html:26
+#: templates/chatgpt.html:19
 msgid "voice REC"
 msgstr "声で送る"
 
-#: templates/chatgpt.html:34
+#: templates/chatgpt.html:29
 msgid "submit"
 msgstr "Say!"
 
-#: templates/login.html:5 templates/login.html:25
+#: templates/chatgpt.html:33
+msgid "continue"
+msgstr ""
+
+#: templates/chatgpt.html:54
+msgid "Summarization?"
+msgstr "要約する？"
+
+#: templates/chatgpt.html:63
+msgid "audio"
+msgstr "しゃべる"
+
+#: templates/login.html:5 templates/login.html:28
 msgid "Login"
 msgstr "ログイン"
 
-#: templates/login.html:12
+#: templates/login.html:15
 msgid "Chat API Login"
 msgstr "ログイン"
 
-#: templates/login.html:15 templates/register_user.html:16
+#: templates/login.html:18 templates/register_user.html:19
 msgid "Login ID"
 msgstr "ログインID"
 
-#: templates/login.html:20 templates/register_user.html:23
+#: templates/login.html:23 templates/register_user.html:26
 msgid "Password"
 msgstr "パスワード"
 
-#: templates/register_user.html:5 templates/register_user.html:12
-#: templates/register_user.html:38
+#: templates/moderation.html:5 templates/moderation.html:18
+msgid "Moderation API"
+msgstr "モデレーションチェック"
+
+#: templates/moderation.html:5
+msgid "ChatGPT API Chat"
+msgstr "ログイン"
+
+#: templates/moderation.html:22 templates/system_prompt.html:26
+msgid "Prompt Content"
+msgstr "プロンプトの内容"
+
+#: templates/moderation.html:32
+msgid "Select Moderation Model:"
+msgstr "モデレーションモデルの選択"
+
+#: templates/moderation.html:46 templates/system_prompt.html:80
+msgid "Check Moderation"
+msgstr "モデレーションを行う"
+
+#: templates/moderation.html:47
+msgid "Cleanup Prompt"
+msgstr "ゴミ消し"
+
+#: templates/moderation.html:48 templates/system_prompt.html:73
+msgid "Download TXT"
+msgstr "プロンプトをダウンロード(.txt)"
+
+#: templates/moderation.html:49 templates/system_prompt.html:74
+msgid "Download MD"
+msgstr "プロンプトをダウンロード(.md)"
+
+#: templates/moderation.html:50 templates/system_prompt.html:75
+msgid "Copy To Clipboard"
+msgstr "プロンプトをクリップボードにコピー"
+
+#: templates/register_user.html:5 templates/register_user.html:15
+#: templates/register_user.html:41
 msgid "Register User"
 msgstr "ユーザーを登録する"
 
-#: templates/register_user.html:30
+#: templates/register_user.html:33
 msgid "User Name"
 msgstr "ユーザー名"
 
-#: templates/registration_code.html:5 templates/registration_code.html:12
-#: templates/registration_code.html:16 templates/registration_code_list.html:19
+#: templates/registration_code.html:5 templates/registration_code.html:15
+#: templates/registration_code.html:19 templates/registration_code_list.html:22
 msgid "Registration Code"
 msgstr "登録コード"
 
-#: templates/registration_code.html:21 templates/registration_code_list.html:20
+#: templates/registration_code.html:24 templates/registration_code_list.html:23
 msgid "Remarks"
 msgstr "備考"
 
-#: templates/registration_code.html:26 templates/registration_code_list.html:24
+#: templates/registration_code.html:29 templates/registration_code_list.html:27
 msgid "Expiration Time"
 msgstr "有効期限"
 
-#: templates/registration_code.html:31
+#: templates/registration_code.html:34
 msgid "Role"
 msgstr "ロール"
 
-#: templates/registration_code.html:39 templates/registration_code_list.html:42
+#: templates/registration_code.html:42 templates/registration_code_list.html:45
 msgid "Add Code"
 msgstr "登録コード追加"
 
 #: templates/registration_code_list.html:5
-#: templates/registration_code_list.html:12
+#: templates/registration_code_list.html:15
 msgid "Registration Code List"
 msgstr "登録コード一覧"
 
-#: templates/registration_code_list.html:15
+#: templates/registration_code_list.html:18
 msgid "Registration code has not been registered yet."
 msgstr "登録コードはまだ登録されていません。"
 
-#: templates/registration_code_list.html:21
+#: templates/registration_code_list.html:24
 msgid "Is Used"
 msgstr "使用済み"
 
-#: templates/registration_code_list.html:22
+#: templates/registration_code_list.html:25
 msgid "Name of the user who Added this"
 msgstr "追加したユーザー"
 
-#: templates/registration_code_list.html:23
+#: templates/registration_code_list.html:26
 msgid "Issuing Time"
 msgstr "使用された日時"
 
-#: templates/registration_code_list.html:25
+#: templates/registration_code_list.html:28
 msgid "Roles"
 msgstr "ロール"
 
-#: templates/system_prompt.html:5 templates/system_prompt.html:13
-msgid "System Prompt"
-msgstr "システムプロンプト"
+#: templates/roleplayer.html:5 templates/roleplayer.html:17
+msgid "Roleplayer"
+msgstr ""
 
-#: templates/system_prompt.html:18 templates/system_prompt_list.html:18
-msgid "Prompt Name"
-msgstr "プロンプト名"
+#: templates/roleplayer.html:21
+msgid "Roleplayer Name"
+msgstr "ロールプレイヤー名"
 
-#: templates/system_prompt.html:23
-msgid "Prompt Content"
-msgstr "プロンプトの内容"
+#: templates/roleplayer.html:27
+msgid "Roleplayer Icon"
+msgstr ""
 
-#: templates/system_prompt.html:29
+#: templates/roleplayer.html:29
+msgid "Icon Setting"
+msgstr ""
+
+#: templates/roleplayer.html:32
+msgid "Roleplayer Memo"
+msgstr ""
+
+#: templates/roleplayer.html:39 templates/system_prompt.html:33
+msgid "This prompt is locked?"
+msgstr ""
+
+#: templates/roleplayer.html:44 templates/system_prompt.html:38
 msgid "Everyone can see?"
 msgstr "全員が参照できる？"
 
-#: templates/system_prompt.html:34 templates/system_prompt_list.html:21
+#: templates/roleplayer.html:48 templates/system_prompt.html:42
+#: templates/system_prompt_list.html:25
 msgid "Everyone can edit?"
 msgstr "全員が編集できる？"
 
-#: templates/system_prompt.html:39 templates/system_prompt_list.html:19
+#: templates/roleplayer.html:52 templates/system_prompt.html:46
+#: templates/system_prompt_list.html:23
 msgid "Owner User"
 msgstr "オーナーユーザー"
 
-#: templates/system_prompt.html:43 templates/system_prompt_list.html:22
+#: templates/roleplayer.html:56 templates/system_prompt.html:50
+#: templates/system_prompt_list.html:26
 msgid "Last Updated"
 msgstr "最終更新日時"
 
-#: templates/system_prompt.html:47
+#: templates/roleplayer.html:60 templates/system_prompt.html:54
 msgid "Updated User"
 msgstr "最終更新ユーザー"
 
-#: templates/system_prompt.html:61
+#: templates/roleplayer.html:75
+msgid "Register Roleplayer"
+msgstr "ロールプレイヤーを登録"
+
+#: templates/roleplayer.html:77
+msgid "Edit Roleplayer"
+msgstr "ロールプレイヤーを編集"
+
+#: templates/roleplayer.html:80 templates/system_prompt.html:77
+msgid "Revert"
+msgstr "編集前に戻す"
+
+#: templates/roleplayer.html:81
+msgid "Delete Roleplayer"
+msgstr ""
+
+#: templates/system_prompt.html:5 templates/system_prompt.html:17
+msgid "System Prompt"
+msgstr "システムプロンプト"
+
+#: templates/system_prompt.html:21 templates/system_prompt_list.html:22
+msgid "Prompt Name"
+msgstr "プロンプト名"
+
+#: templates/system_prompt.html:69
 msgid "Register Prompt"
 msgstr "プロンプトを登録"
 
-#: templates/system_prompt.html:63
+#: templates/system_prompt.html:71
 msgid "Edit Prompt"
 msgstr "プロンプトを編集"
 
-#: templates/system_prompt.html:65
-msgid "Download TXT"
-msgstr "プロンプトをダウンロード(.txt)"
-
-#: templates/system_prompt.html:66
-msgid "Download MD"
-msgstr "プロンプトをダウンロード(.md)"
-
-#: templates/system_prompt.html:67
-msgid "Copy To Clipboard"
-msgstr "プロンプトをクリップボードにコピー"
-
-#: templates/system_prompt.html:69
-msgid "Revert"
-msgstr "編集前に戻す"
+#: templates/system_prompt.html:78
+msgid "Delete Prompt"
+msgstr "プロンプトを削除"
 
 #: templates/system_prompt_list.html:5
 msgid "Systme Prompot List"
 msgstr "システムプロンプト一覧"
 
-#: templates/system_prompt_list.html:14
+#: templates/system_prompt_list.html:18
 msgid "System prompt has not been registered yet."
 msgstr "システムプロンプトはまだ登録されていません。"
 
-#: templates/system_prompt_list.html:20
+#: templates/system_prompt_list.html:24
 msgid "My Prompt"
 msgstr "自分のプロンプト"
 
-#: templates/system_prompt_list.html:23
+#: templates/system_prompt_list.html:27
 msgid "Last Updated User"
 msgstr "最終更新ユーザー"
 
-#: templates/system_prompt_list.html:24 templates/system_prompt_list.html:34
+#: templates/system_prompt_list.html:28 templates/system_prompt_list.html:38
 msgid "Detail"
 msgstr "詳細"
 
-#: templates/system_prompt_list.html:41
+#: templates/system_prompt_list.html:45
 msgid "Add System Prompt"
 msgstr "システムプロンプトを追加する"
+
+#: templates/error/403.html:7
+msgid "403 Forbidden"
+msgstr ""
+
+#: templates/error/403.html:27
+msgid "Forbidden"
+msgstr ""
+
+#: templates/parts/common_scripts.html:16
+msgid "New Chat"
+msgstr "新しくChatを始める"
+
+#: templates/parts/common_scripts.html:17
+msgid "Chat List"
+msgstr "Chatリスト"
+
+#: templates/parts/common_scripts.html:18
+msgid "New Prompt"
+msgstr "システムプロンプトを作成"
+
+#: templates/parts/common_scripts.html:19
+msgid "Prompt List"
+msgstr "システムプロンプト一覧"
+
+#: templates/parts/common_scripts.html:29
+#: templates/parts/common_scripts.html:51
+msgid "OK"
+msgstr ""
+
+#: templates/parts/common_scripts.html:54
+msgid "Cancel"
+msgstr ""
+
+#~ msgid "clear chat"
+#~ msgstr "Clear Chat"
 

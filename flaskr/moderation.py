@@ -1,4 +1,5 @@
 from flask import session, render_template, request, redirect, url_for, jsonify
+from flask_login import current_user
 from . import app
 from .utils.commons import generate_random_string, get_query_param_from_url, create_error_info
 from .utils.moderation_commons import check_moderation_main, get_moderation_result
@@ -14,6 +15,9 @@ def system_prompt_detail_show_free():
     if free_key in app.config['MODERATION_CREDENTIALS']:
         return render_template("moderation.html", system_prompt={}, csrf_token=csrf_token,
                                 user_name=app.config['MODERATION_CREDENTIALS'][free_key])
+    elif current_user.is_authenticated:
+        return render_template("moderation.html", system_prompt={}, csrf_token=csrf_token,
+                                user_name=current_user.user_name)
 
 #    return render_template("error/403.html"), 403
     return redirect(url_for('login_show'))
@@ -29,7 +33,7 @@ def check_moderation():
     if 'csrf_token' in data:
         # CSRFトークンが渡された場合：
         csrf_token = data['csrf_token']
-        if session['system_prompt_csrf_token'] == csrf_token:
+        if session['moderation_csrf_token'] == csrf_token:
             authorized = True
 
     if not authorized:
@@ -40,7 +44,7 @@ def check_moderation():
             if free_key in app.config['MODERATION_CREDENTIALS']:
                 authorized = True
 
-    if not authorized:
+    if not authorized and not current_user.is_authenticated:
         response_code = 403
         # result_dict = {'error_message':'Error', 'result': []}
         result_dict = create_error_info(message='Forbidden.', status=response_code, path='/moderation/check')
