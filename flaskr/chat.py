@@ -4,7 +4,8 @@ from flask_login import login_required, current_user
 from .models.chat_db import ChatHistory, ChatInfo, WordReplacing
 from .utils.commons import is_empty, count_token, generate_random_string, is_valid_uuid, get_current_time, remove_control_characters, create_error_info, get_model_id, get_model_dict_by_id, get_model_dict_by_name, get_default_model, get_model_name_by_id, ALL_MODEL_ID
 from .utils.moderation_commons import code_moderation_json, check_moderation_main, round_to_3rd_decimal, check_sorry_message
-import openai, json, logging, os, glob, uuid
+from openai import OpenAI
+import json, logging, os, glob, uuid
 from sqlalchemy import func, desc
 from datetime import datetime
 
@@ -203,7 +204,7 @@ def chat():
         user_message = {'role':'user', 'content':user_text}
         next_messages.append(user_message)
 
-    print(f'@@@@@@@@@@ next_messages={next_messages}')
+    app_logger.debug(f'@@@@@@@@@@ next_messages={next_messages}')
 
     if is_new_chat:
         # システムプロンプトを登録
@@ -222,7 +223,8 @@ def chat():
 
         # Call GPT API
         # openai.api_key = 'your-api-key'
-        response = openai.ChatCompletion.create(
+        client = OpenAI()
+        response = client.chat.completions.create(
             model=chatgpt_model,
             messages=next_messages,
             user=user_id
@@ -230,11 +232,11 @@ def chat():
         )
 
         # アシスタントメッセージと、そのためのトータルのトークン数を取得する
-        assistant_message_text = response['choices'][0]['message']['content']
-        total_tokens = response['usage']['total_tokens']
-        response_id = response['id']
-        response_created = datetime.fromtimestamp(response['created']).strftime('%Y%m%d%H%M%S%f')[:-3]
-        response_model = response['model']
+        assistant_message_text = response.choices[0].message.content
+        total_tokens = response.usage.total_tokens
+        response_id = response.id
+        response_created = datetime.fromtimestamp(response.created).strftime('%Y%m%d%H%M%S%f')[:-3]
+        response_model = response.model
         response_chatgpt_id = get_model_id(response_model)
 
         # Continueかつ、レスポンスに「申し訳」関連の文言が含まれていた場合、エラーとして返す。
@@ -257,13 +259,14 @@ def chat():
 
             # 要約を取得する
             # Call GPT API
-            response = openai.ChatCompletion.create(
+            client = OpenAI()
+            response = client.chat.completions.create(
                 model=chatgpt_model,
                 messages=next_messages
             )
-            latest_summary_text = response['choices'][0]['message']['content']
-            summary_tokens = response['usage']['completion_tokens']
-            print(f'@@@@@@@@@@ latest_summary_text({summary_tokens} tokens): {latest_summary_text}')
+            latest_summary_text = response.choices[0].message.content
+            summary_tokens = response.usage.completion_tokens
+            app_logger.debug(f'@@@@@@@@@@ latest_summary_text({summary_tokens} tokens): {latest_summary_text}')
 
             # TODO 要約に失敗した疑いがある場合は別途チェックし、失敗していたら要約は保存しない（再試行も考えられる）。
 
@@ -349,7 +352,7 @@ def chat():
                 app_logger.debug(f'UPDATE chat_history SET is_deleted = 0 WHERE chat_no = {latest_chat.chat_no} AND seq = {latest_chat.seq};\nUPDATE chat_history SET is_deleted = 1 WHERE chat_no = {assistant_message.chat_no} AND seq = {assistant_message.seq};')
 
             else:
-                print('@@@@@@@@@@ latest_chat is not assistant one. latest_chat.role=' + latest_chat.role)
+                app_logger.debug('@@@@@@@@@@ latest_chat is not assistant one. latest_chat.role=' + latest_chat.role)
 
         # チャットの往復が成功したので、チャット情報の更新日時を最新にする。
         chatInfo.updated_time = get_current_time()
@@ -359,9 +362,9 @@ def chat():
             userSeq = user_message.seq
         assistantSeq = assistant_message.seq
         if not image_url:
-            image_url = app.config['DEFAULT_ASSISTANT_PIC']
+            image_url = url_for('static', filename=f'faces/{app.config["DEFAULT_ASSISTANT_PIC"]}')
 
-        print(f'@@@@@@@@@@ OpenAI API Response: {response}')
+        app_logger.debug(f'@@@@@@@@@@ OpenAI API Response: {response}')
 
         # assistant_message_text をオーディオファイルに変換
         if audioOn and speaker != None and speaker != '':
@@ -372,8 +375,8 @@ def chat():
             voicevoxPort = app.config['VOICEVOX_PORT']
             assistant_message_text_for_voice = replace_for_voice(assistant_message_text)
             voicevox.generate_wav(assistant_message_text_for_voice, speaker=speaker, filepath=audio_abs_path, protocol=voicevoxProtocol, host=voicevoxHost, port=voicevoxPort)
-            print(f'@@@@@@@@@@ audio_abs_path={audio_abs_path}')
-            audio_path = '/static/audios/' + audioFileName
+            app_logger.debug(f'@@@@@@@@@@ audio_abs_path={audio_abs_path}')
+            audio_path = url_for('static', filename=f'audios/{audioFileName}')
 
         result = True
 
@@ -381,7 +384,7 @@ def chat():
         app_logger.exception('チャット送受信に失敗しました。')
         assistant_message_text = 'ちょっと待ってね。'
         if audioOn and not is_empty(speaker):
-            audio_path = f'/static/audios/0{speaker}_001_waitaminutes.wav'
+            audio_path = url_for('static', filename=f'audios/0{speaker}_001_waitaminutes.wav')
 
     # Return assistant message
     return jsonify(result=result, role='assistant', content=assistant_message_text, audio_path=audio_path, chat_name=chat_name, moderation_result=moderation_result_list,
@@ -659,6 +662,11 @@ def get_face_file_path_list(reverse=False):
     image_urls = [url_for('static', filename=f'faces/{f}') for f in image_files]
     return image_urls
 
+@app.route('/chat_history/word-replace', methods=['GET'])
+@login_required
+def get_word_replace():
+    pass
+
 @app.route('/chat_history/word-replace', methods=['POST'])
 @login_required
 def save_word_replace():
@@ -737,7 +745,7 @@ def index():
 
         image_url = chatInfo.assistant_pic_url
         if not image_url:
-            image_url = app.config['DEFAULT_ASSISTANT_PIC']
+            image_url = url_for('static', filename=f'faces/{app.config["DEFAULT_ASSISTANT_PIC"]}')
         chat_history_list = [{'role': ch.role, 'content': ch.content, 'image_url': image_url if 'assistant' == ch.role else '', 'moderation': ch.moderation_color, 'seq': ch.seq, 'model_name': get_model_name_by_id(ch.model_id)} for ch in chat_history]
         chat_history_list.pop(0)  # 先頭のシステムプロンプトを削除
         chat_name = chatInfo.chat_name
@@ -944,7 +952,7 @@ import sqlite3
 def setup():
     DATABASE = "instance/database.db"
     con = sqlite3.connect(DATABASE)
-    
+
     # SQLファイルの内容を読み込む
     with open("./design/create_tables.sqlite3.sql", "r") as file:
         sql_script = file.read()

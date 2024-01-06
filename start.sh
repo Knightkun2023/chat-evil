@@ -12,6 +12,7 @@ source venv/bin/activate
 # Run Flask App
 export FLASK_APP=flaskr
 export FLASK_ENV=development
+export DATABASE_URL="sqlite:///database.db"
 export OPENAI_API_KEY="<API Key of OpenAI API>"
 export GOOGLE_AI_API_KEY="<API Key of OpenAI API>"
 export REMOTE_URL=http://127.0.0.1:5505

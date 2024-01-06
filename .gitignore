@@ -11,3 +11,5 @@ logs
 start_*.bat
 start_*.ps1
 start_*.sh
+flaskapp.wsgi
+sandbox/output/*

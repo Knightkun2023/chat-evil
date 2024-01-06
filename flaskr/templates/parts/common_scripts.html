@@ -13,10 +13,10 @@
 <div class="menu-content">
   <!-- メニューアイテムをここに追加 -->
   <ul>
-    <li><a href="/">{{_('New Chat')}}</a></li>
-    <li><a href="/chat/list">{{_('Chat List')}}</a></li>
-    <li><a href="/prompt">{{_('New Prompt')}}</a></li>
-    <li><a href="/prompt/list">{{_('Prompt List')}}</a></li>
+    <li><a href="{{ url_for('index') }}">{{_('New Chat')}}</a></li>
+    <li><a href="{{ url_for('chat_list') }}">{{_('Chat List')}}</a></li>
+    <li><a href="{{ url_for('system_prompt_detail_show') }}">{{_('New Prompt')}}</a></li>
+    <li><a href="{{ url_for('system_prompt_list') }}">{{_('Prompt List')}}</a></li>
   </ul>
 </div>
 
@@ -58,5 +58,5 @@
 
 <!-- アイコンを表示する場所 -->
 <div id="loadingIcon" style="display: none;">
-  <img src="{{ remote_url }}/static/images/loading-loading-forever.gif" alt="Loading...">
+  <img src="{{ url_for('static', filename='images/loading-loading-forever.gif') }}" alt="Loading...">
 </div>

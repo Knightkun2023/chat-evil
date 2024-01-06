@@ -1,4 +1,4 @@
-import os, requests, re
+import os, requests, re, logging
 from .commons import create_error_info
 
 # モデレーションのカテゴリのキー。この順序で格納する。
@@ -55,7 +55,6 @@ def get_binary_flagged(data):
     flagged = ''
     if data['results'][0]['flagged']:
         for key in moderation_category_keys:
-            # print(key)
             if data['results'][0]['categories'][key]:
                 flagged = flagged + '1'
             else:
@@ -81,7 +80,6 @@ def code_score(float_num):
 def code_scores(data):
     coded_scores = ''
     for key in moderation_category_keys:
-        # print(key)
         score = data['results'][0]['category_scores'][key]
         coded_scores = coded_scores + code_score(score)
 
@@ -155,6 +153,7 @@ def decode_moderation_str(coded_str: str) -> dict:
     return result_dict
 
 def get_moderation_result(content, key, moderation_model_no=1) -> dict:
+    app_logger = logging.getLogger('app_logger')
     moderation_model = 'text-moderation-latest'
     if moderation_model_no == 2:
         moderation_model = 'text-moderation-stable'
@@ -169,13 +168,13 @@ def get_moderation_result(content, key, moderation_model_no=1) -> dict:
     }
 
     response = requests.post(url, headers=headers, json=payload)
-    print("@@@@@@@@@@ moderation response: " + str(response.json()))
+    app_logger.debug("@@@@@@@@@@ moderation response: " + str(response.json()))
 
     if response.status_code == 200:
         result = response.json()
         return result
     else:
-        print(f"Error: {response.status_code} - {response.text}")
+        app_logger.warn(f"Error: {response.status_code} - {response.text}")
         return {"error": {
             "status_code": response.status_code,
             "text": response.text

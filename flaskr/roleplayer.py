@@ -180,7 +180,7 @@ def roleplayer_detail():
         rs = db.session.query(
             func.max(Roleplayers.roleplayer_id).label('max_prompt_id')
         ).one_or_none()
-        print(f'@@@@@@@@@@@ rs={rs}')
+        app_logger.debug(f'@@@@@@@@@@@ rs={rs}')
         roleplayer_id = 1
         if rs:
             roleplayer_id = roleplayer_id + rs[0]
@@ -263,7 +263,6 @@ def roleplayer_detail():
         return jsonify({'redirect': url_for('roleplayer_detail_show', roleplayer_id=roleplayer_id)}), response_code
 
     except Exception as e:
-        print(e)
         # エラーが発生した。
         response_code = 500
         message = 'システムプロンプトの更新に失敗しました。'
@@ -362,7 +361,6 @@ def delete_prompt():
         return jsonify({'redirect': url_for('roleplayer_list')})
 
     except Exception as e:
-        print(e)
         # エラーが発生した。
         message = 'ロールプレイヤーの削除に失敗しました。'
         response_code = 500

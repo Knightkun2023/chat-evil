@@ -167,7 +167,7 @@ def system_prompt_detail():
         rs = db.session.query(
             func.max(SystemPrompts.prompt_id).label('max_prompt_id')
         ).one_or_none()
-        print(f'@@@@@@@@@@@ rs={rs}')
+        app_logger.debug(f'@@@@@@@@@@@ rs={rs}')
         prompt_id = 1
         if rs:
             prompt_id = prompt_id + rs[0]
@@ -242,7 +242,6 @@ def system_prompt_detail():
 
         return jsonify({'redirect': url_for('system_prompt_detail_show', prompt_id=prompt_id, main_error_message='更新しました。')})
     except Exception as e:
-        print(e)
         # エラーが発生した。
         app_logger.exception('システムプロンプトの更新に失敗しました。')
         error_msgs['main_error_message'] = 'エラーが発生しました。'
@@ -330,7 +329,6 @@ def delete_prompt():
 
         return jsonify({'redirect': url_for('system_prompt_list', main_error_message='削除しました。')})
     except Exception as e:
-        print(e)
         # エラーが発生した。
         app_logger.exception('システムプロンプトの削除に失敗しました。')
         error_msgs['main_error_message'] = 'エラーが発生しました。'

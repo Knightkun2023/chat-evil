@@ -1064,7 +1064,7 @@ $('#btn_continue').on('click', function() {
 function setupNewChatUUID() {
     var chat_uuid = mkuuid();
     $('#chat_uuid').val(chat_uuid);
-    var newURL = '/?chat_uuid=' + chat_uuid;
+    var newURL = REMOTE_URL + '/?chat_uuid=' + chat_uuid;
     history.pushState(null, null, newURL);
 }
 

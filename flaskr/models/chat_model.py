@@ -30,7 +30,7 @@ class ChatModel:
         else:
             raise ValueError(f'モデル名が不適切で、ChatModel系インスタンスを生成できませんでした。modelName=[{modelName}]')
 
-import openai
+from openai import OpenAI
 from datetime import datetime
 from ..utils.commons import get_model_id
 class ChatGptModel(ChatModel):
@@ -45,18 +45,19 @@ class ChatGptModel(ChatModel):
         messages = self._get_history().copy()
         messages.append(self._getDict('user', content))
 
-        response = openai.ChatCompletion.create(
+        client = OpenAI()
+        response = client.chat.completions.create(
             model = self._get_modelName(),
             messages = messages
         )
 
         # アシスタントメッセージと、そのためのトータルのトークン数を取得する
         res = {}
-        assistant_message_text = response['choices'][0]['message']['content']
-        total_tokens = response['usage']['total_tokens']
-        response_id = response['id']
-        response_created = datetime.fromtimestamp(response['created']).strftime('%Y%m%d%H%M%S%f')[:-3]
-        response_model = response['model']
+        assistant_message_text = response.choices[0].message.content
+        total_tokens = response.usage.total_tokens
+        response_id = response.id
+        response_created = datetime.fromtimestamp(response.created).strftime('%Y%m%d%H%M%S%f')[:-3]
+        response_model = response.model
         response_chatgpt_id = get_model_id(response_model)
 
         res['assistant_message_text'] = assistant_message_text

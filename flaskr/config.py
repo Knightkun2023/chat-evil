@@ -24,8 +24,8 @@ VOICEVOX_PORT = 50021
 # 音声変換をする際の文字列変換ルールファイル（JSON。拡張子は小文字とし、ここでは記述不要）
 VOICE_REPLACE_RULE_FILE='./materials/replace_for_voice'
 
-# database settings
-SQLALCHEMY_DATABASE_URI='sqlite:///database.db'
+# database settings set by environmental variables
+#SQLALCHEMY_DATABASE_URI='sqlite:///database.db'
 #SQLALCHEMY_DATABASE_URI="mysql+pymysql://username:password@localhost/dbname"
 
 # Flask-Sessionによるセッションの格納先。filesystemはローカルファイル。他にredis、memcacheなどをサポートしている。
@@ -36,4 +36,4 @@ SESSION_TYPE='filesystem'
 EXPIRATION_MINUTES=1440*3  # 3日間
 
 # デフォルトの顔
-DEFAULT_ASSISTANT_PIC='/static/faces/20231231181229555.png'
+DEFAULT_ASSISTANT_PIC='20231231181229555.png'

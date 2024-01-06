@@ -246,7 +246,7 @@ def register_user():
     if not rs:
         user_no = user_no + rs.max_user_no
 
-    print(f'@@@@@@@@@@ login_id={login_id}')
+    app_logger.debug(f'@@@@@@@@@@ login_id={login_id}')
     user = LoginUser(user_no=user_no, revision=1, user_id=login_id, user_name=user_name, 
                      roles=rs_registration_codes.roles, updated_time=get_current_time())
     user.set_password(password)

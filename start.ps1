@@ -10,6 +10,7 @@
 # Run Flask App
 $env:FLASK_APP="flaskr"
 $env:FLASK_ENV="development"
+$env:DATABASE_URL=sqlite:///database.db
 $env:OPENAI_API_KEY="<API Key of OpenAI API>"
 $env:GOOGLE_AI_API_KEY="<API Key of Google AI API>"
 $env:REMOTE_URL="http://127.0.0.1:5505"

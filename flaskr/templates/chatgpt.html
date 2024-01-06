@@ -4,6 +4,8 @@
         <meta charset="UTF-8">
         <title>ChatGPT API Chat</title><!-- {{ chat_no }} -->
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" href="{{ url_for('favicon') }}" type="image/x-icon" />
+        <link rel="Shortcut Icon" href="{{ url_for('favicon') }}" type="img/x-icon" />
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <link rel="stylesheet" href="{{ url_for('static', filename='common.css') }}">
@@ -126,7 +128,7 @@
 
                 <div class="setting-row d-flex flex-wrap">
                     <div class="panel-component p-c-w-31 d-inline-block">
-                        顔写真を選択 <a href="/test/crop" target="_blank" alt="Add face pic."><i class="fa-solid fa-user-plus"></i></a>
+                        顔写真を選択 <a href="{{ url_for('test_crop') }}" target="_blank" alt="Add face pic."><i class="fa-solid fa-user-plus"></i></a>
                         <i class="fa-solid fa-arrows-rotate btn-reload-face"></i>
                     </div>
                     <div class="panel-component p-c-w-32 d-inline-block">

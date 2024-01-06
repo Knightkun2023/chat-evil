@@ -1,4 +1,5 @@
-import logging, traceback, os
+import logging, logging.config, traceback, os, json
+from pathlib import Path
 from logging.handlers import TimedRotatingFileHandler
 
 class CustomFormatter(logging.Formatter):
@@ -25,27 +26,20 @@ class CustomFormatter(logging.Formatter):
 
 def configure_logging(app):
 
-    # ロガーを作成
-    logger = logging.getLogger('app_logger')
-    logger.setLevel(logging.DEBUG)
+    # logging.json
+    logging_json_path = Path(__file__).parent / ('logging_' + os.environ['FLASK_ENV'] + '.json')
 
-    log_format = '%(asctime)s [%(levelname)s] %(pathname)s:%(lineno)d - %(message)s'
-    logging.basicConfig(level=logging.INFO, format=log_format)
+    # JSON設定の読み込み
+    with open(logging_json_path, 'r') as config_file:
+        config = json.load(config_file)
+
+    logging.config.dictConfig(config)
 
     # フォーマッター
+    log_format = '%(asctime)s [%(levelname)s] %(pathname)s:%(lineno)d - %(message)s'
     formatter = CustomFormatter(log_format)
 
-    # 日単位のローテーション
-    log_file = 'logs/app.log'
-    file_handler = TimedRotatingFileHandler(log_file, when='midnight', backupCount=30)
-    file_handler.setFormatter(formatter)
-    file_handler.setLevel(logging.INFO)
-    logger.addHandler(file_handler)
-
-    # 標準出力へのロガー
-    console_handler = logging.StreamHandler()
-    console_handler.setFormatter(formatter)
-    console_handler.setLevel(logging.DEBUG)
-    # formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-    # console_handler.setFormatter(formatter)
-    logger.addHandler(console_handler)
+    # 特定のハンドラにカスタムフォーマッタを設定
+    logger = logging.getLogger('app_logger')
+    for handler in logger.handlers:
+        handler.setFormatter(formatter)

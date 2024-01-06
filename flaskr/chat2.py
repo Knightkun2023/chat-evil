@@ -363,7 +363,7 @@ def chat2():
             userSeq = user_message.seq
         assistantSeq = assistant_message.seq
         if not image_url:
-            image_url = app.config['DEFAULT_ASSISTANT_PIC']
+            image_url = url_for('static', filename=f'faces/{app.config["DEFAULT_ASSISTANT_PIC"]}')
 
         app_logger.debug(f'@@@@@@@@@@ OpenAI API Response: {response}')
 
@@ -377,7 +377,7 @@ def chat2():
             assistant_message_text_for_voice = replace_for_voice(assistant_message_text)
             voicevox.generate_wav(assistant_message_text_for_voice, speaker=speaker, filepath=audio_abs_path, protocol=voicevoxProtocol, host=voicevoxHost, port=voicevoxPort)
             app_logger.debug(f'@@@@@@@@@@ audio_abs_path={audio_abs_path}')
-            audio_path = '/static/audios/' + audioFileName
+            audio_path = url_for('static', filename=f'audios/{audioFileName}')
 
         result = True
 
@@ -385,7 +385,7 @@ def chat2():
         app_logger.exception('チャット送受信に失敗しました。')
         assistant_message_text = 'ちょっと待ってね。'
         if audioOn and not is_empty(speaker):
-            audio_path = f'/static/audios/0{speaker}_001_waitaminutes.wav'
+            audio_path = url_for('static', filename=f'audios/0{speaker}_001_waitaminutes.wav')
 
     # Return assistant message
     return jsonify(result=result, role='assistant', content=assistant_message_text, audio_path=audio_path, chat_name=chat_name, moderation_result=moderation_result_list,
