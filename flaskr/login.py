@@ -1,17 +1,23 @@
 from flask import session, render_template, request, redirect, url_for, jsonify
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from flask_session import Session
-import os
+import logging
 from . import app, db
 from .models.login_db import LoginUser, RegistrationCode, LoginHistory
 from datetime import datetime, timedelta
 from .utils.commons import is_empty, valid_datetime, is_numeric, get_current_time, generate_random_string, is_alpha_digits, get_display_time
 from sqlalchemy.sql import func
+from urllib.parse import urlparse, urljoin
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login_show'
 Session(app)
+
+def is_safe_url(target):
+    ref_url = urlparse(request.host_url)
+    test_url = urlparse(urljoin(request.host_url, target))
+    return test_url.scheme in ('http', 'https') and ref_url.netloc == test_url.netloc
 
 @app.route('/login', methods=['GET'])
 def login_show():
@@ -26,21 +32,27 @@ def login_show():
 
 @app.route('/login', methods=['POST'])
 def login_process():
-
+    app_logger = logging.getLogger('app_logger')
     data = request.get_json()
     user_id = data['login_id']
     password = data['password']
+    next_page = data['next'] if 'next' in data else None
     csrf_token = data['csrf_token']
+
+    if is_empty(next_page):
+        next_page = None
 
     # CSRFトークンのチェック
     if not 'login_csrf_token' in session or not session['login_csrf_token'] == csrf_token:
         # CSRF token is not valid, show an error message or redirect
+        app_logger.debug('ログイン失敗！ CSRFトークン不一致。')
         return jsonify({'main_error_message': 'Invalid username or password'}), 401  # ログイン失敗
 
     user = LoginUser.query.filter_by(user_id=user_id).order_by(LoginUser.revision.desc()).first()
 
     if user is not None and user.check_password(password):
         login_user(user)
+        app_logger.debug('ログイン成功！ user_no=' + str(user.user_no))
 
         # ログイン成功時の履歴を保存
         login_history = LoginHistory(
@@ -54,6 +66,12 @@ def login_process():
         db.session.add(login_history)
         db.session.commit()
 
+        app_logger.debug('ログイン後の遷移先 next_page=[' + str(next_page) + '] type=[' + str(type(next_page)) + ']')
+        if next_page is not None and is_safe_url(next_page):
+            app_logger.debug('ログインの返却JSON(next)=[' + str(jsonify({'redirect': next_page})) + ']')
+            return jsonify({'redirect': next_page})
+
+        app_logger.debug('ログインの返却JSON(index)=[' + str(jsonify({'redirect': url_for('index')})) + ']')
         return jsonify({'redirect': url_for('index')})
 
     # ログイン失敗時の履歴を保存
@@ -67,6 +85,8 @@ def login_process():
     )
     db.session.add(login_history)
     db.session.commit()
+
+    app_logger.debug('ログイン失敗！ User/Pass不一致。')
 
     return jsonify({'main_error_message': 'Invalid username or password'}), 401  # ログイン失敗
 
@@ -185,6 +205,7 @@ def create_registration_code():
 
 @app.route('/register_user', methods=['GET', 'POST'])
 def register_user():
+    app_logger = logging.getLogger('app_logger')
     if request.method == 'GET':
         registration_code = request.args.get('r')
         if is_empty(registration_code):

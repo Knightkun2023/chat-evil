@@ -8,7 +8,12 @@ $(document).ready(function() {
 
         var login_id = $('#login_id').val().trim();
         var password = $('#password').val().trim();
+        var next = $('#next').val().trim();
         var csrf_token = $('#csrf_token').val();
+
+        if (next === "None") {
+            next = "";
+        }
 
         // 入力チェック
         var validate = true;
@@ -31,6 +36,7 @@ $(document).ready(function() {
             data: JSON.stringify({
                 'login_id': login_id,
                 'password': password,
+                'next': next,
                 'csrf_token': csrf_token
             }),
             dataType: 'json',

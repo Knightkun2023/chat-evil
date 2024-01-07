@@ -2,12 +2,8 @@
 <html lang="ja">
     <head>
         <meta charset="UTF-8">
-        <title>{{_('Registration Code')}} / ChatGPT API Chat</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="icon" href="{{ url_for('favicon') }}" type="image/x-icon" />
-        <link rel="Shortcut Icon" href="{{ url_for('favicon') }}" type="img/x-icon" />
-        <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-5.3.0.min.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='common.css') }}">
+        <title>{{_('Registration Code')}} | {{_('ChatGPT API Chat')}}</title>
+{% include 'parts/common_header.html' %}
         <link rel="stylesheet" href="{{ url_for('static', filename='registration_code.css') }}">
     </head>
     <body>
@@ -44,8 +40,6 @@
         </div>
     </body>
     {% include 'parts/common_scripts.html' %}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='bootstrap-5.3.0.bundle.min.js') }}"></script>
+    {% include 'parts/common_footer.html' %}
     <script type="text/javascript" src="{{ url_for('static', filename='registration_code.js') }}"></script>
-    <script src="https://kit.fontawesome.com/00a14eb7c5.js" crossorigin="anonymous"></script>
 </html>

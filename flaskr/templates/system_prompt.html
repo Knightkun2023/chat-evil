@@ -2,13 +2,9 @@
 <html lang="ja">
     <head>
         <meta charset="UTF-8">
-        <title>{{_('System Prompt')}} / ChatGPT API Chat</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="icon" href="{{ url_for('favicon') }}" type="image/x-icon" />
-        <link rel="Shortcut Icon" href="{{ url_for('favicon') }}" type="img/x-icon" />
-        <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-5.3.0.min.css') }}">
+        <title>{{_('System Prompt')}} | {{_('ChatGPT API Chat')}}</title>
+{% include 'parts/common_header.html' %}
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
-        <link rel="stylesheet" href="{{ url_for('static', filename='common.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='moderation_table.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='system_prompt.css') }}">
     </head>
@@ -83,14 +79,11 @@
         <div id="moderation_modal" class="modal"></div>
     </body>
     {% include 'parts/common_scripts.html' %}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='bootstrap-5.3.0.bundle.min.js') }}"></script>
+    {% include 'parts/common_footer.html' %}
     <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
     <script type="text/javascript">
         var detail_data = JSON.parse({{ serialized_json | default('{}') | tojson | safe }});
     </script>
-    <script type="text/javascript" src="{{ url_for('static', filename='common.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='moderation_table.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='system_prompt.js') }}"></script>
-    <script src="https://kit.fontawesome.com/00a14eb7c5.js" crossorigin="anonymous"></script>
 </html>

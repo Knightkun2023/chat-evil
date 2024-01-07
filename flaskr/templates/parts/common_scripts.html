@@ -1,62 +1,64 @@
-<script type="text/javascript">
-    var REMOTE_URL = "{{ remote_url }}";
-</script>
+  <script type="text/javascript">
+      var REMOTE_URL = "{{ remote_url }}";
+  </script>
 
-<!-- ハンバーガーメニューボタン -->
-<div class="hamburger-menu">
-  <div class="bar"></div>
-  <div class="bar"></div>
-  <div class="bar"></div>
-</div>
+  <!-- ハンバーガーメニューボタン -->
+  <div class="hamburger-menu">
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+  </div>
 
-<!-- ハンバーガーメニューのコンテンツ -->
-<div class="menu-content">
-  <!-- メニューアイテムをここに追加 -->
-  <ul>
-    <li><a href="{{ url_for('index') }}">{{_('New Chat')}}</a></li>
-    <li><a href="{{ url_for('chat_list') }}">{{_('Chat List')}}</a></li>
-    <li><a href="{{ url_for('system_prompt_detail_show') }}">{{_('New Prompt')}}</a></li>
-    <li><a href="{{ url_for('system_prompt_list') }}">{{_('Prompt List')}}</a></li>
-  </ul>
-</div>
+  <!-- ハンバーガーメニューのコンテンツ -->
+  <div class="menu-content">
+    <!-- メニューアイテムをここに追加 -->
+    <ul>
+      <li><a href="{{ url_for('index') }}"><span>{{_('New Chat')}}</span></a></li>
+      <li><a href="{{ url_for('chat_list') }}"><span>{{_('Chat List')}}</span></a></li>
+      <li><a href="{{ url_for('system_prompt_detail_show') }}"><span>{{_('New Prompt')}}</span></a></li>
+      <li><a href="{{ url_for('system_prompt_list') }}"><span>{{_('Prompt List')}}</span></a></li>
+      <li><a href="{{ url_for('get_moderation_view_show') }}"><span>{{_('Moderation')}}</span></a></li>
+      <li><a href="{{ url_for('logout_process') }}"><span>{{_('Logout')}}</span></a></li>
+    </ul>
+  </div>
 
-<div class="alert alert-success alert-dismissible message-box" role="alert">
-  <div>
-    <span class="alert-message-text"></span>
+  <div class="alert alert-success alert-dismissible message-box" role="alert">
+    <div>
+      <span class="alert-message-text"></span>
+    </div>
+    <div>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">{{_('OK')}}</span>
+      </button>
+    </div>
   </div>
-  <div>
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">{{_('OK')}}</span>
-    </button>
-  </div>
-</div>
 
-<div class="alert alert-warning alert-dismissible message-box" role="alert">
-  <div>
-    <span class="alert-message-text"></span>
+  <div class="alert alert-warning alert-dismissible message-box" role="alert">
+    <div>
+      <span class="alert-message-text"></span>
+    </div>
+    <div>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
   </div>
-  <div>
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-</div>
 
-<div class="alert alert-info alert-dismissible message-box" role="alert">
-  <div>
-    <span class="alert-message-text"></span>
+  <div class="alert alert-info alert-dismissible message-box" role="alert">
+    <div>
+      <span class="alert-message-text"></span>
+    </div>
+    <div>
+      <button type="button" class="ok" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">{{_('OK')}}</span>
+      </button>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">{{_('Cancel')}}</span>
+      </button>
+    </div>
   </div>
-  <div>
-    <button type="button" class="ok" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">{{_('OK')}}</span>
-    </button>
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">{{_('Cancel')}}</span>
-    </button>
-  </div>
-</div>
 
-<!-- アイコンを表示する場所 -->
-<div id="loadingIcon" style="display: none;">
-  <img src="{{ url_for('static', filename='images/loading-loading-forever.gif') }}" alt="Loading...">
-</div>
+  <!-- アイコンを表示する場所 -->
+  <div id="loadingIcon" style="display: none;">
+    <img src="{{ url_for('static', filename='images/loading-loading-forever.gif') }}" alt="Loading...">
+  </div>

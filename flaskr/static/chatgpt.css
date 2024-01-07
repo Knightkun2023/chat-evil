@@ -116,10 +116,6 @@ textarea.says {
     width: 66%;
 }
 
-#content_input {
-    /* margin-left: auto; */
-}
-
 .form-style button {
     width: 8rem;
     height: 2rem;
@@ -347,10 +343,16 @@ img.assistant-img {
     display: inline;
 }
 
-@media(max-width:400px){
+@media(max-width:600px){
+    .top-fixed,
+    .bottom-fixed,
+    .scrollable-content {
+        width: 100%;
+        margin: 0;
+    }
     img.assistant-img {
-        width: 48px;
-        height: 48px;
+        width: 64px;
+        height: 64px;
     }
 }
 
@@ -433,12 +435,6 @@ img.assistant-img {
 
 #setting_panel .setting-row {
     margin-bottom: 1rem;
-}
-
-@media(max-width:600px){
-    img.assistant-img {
-        width: 100%;
-    }
 }
 
 .btn-close-setting-panel {

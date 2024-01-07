@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-01-06 18:41+0900\n"
+"POT-Creation-Date: 2024-01-07 13:38+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -85,225 +85,317 @@ msgid ""
 "detail."
 msgstr ""
 
-#: templates/chat_list.html:16
+#: templates/chat_list.html:11
 msgid "No chat yet."
 msgstr ""
 
-#: templates/chatgpt.html:16
-msgid "Chat Name"
-msgstr ""
-
-#: templates/chatgpt.html:17
-msgid "new chat"
-msgstr ""
-
-#: templates/chatgpt.html:19
-msgid "voice REC"
-msgstr ""
-
-#: templates/chatgpt.html:29
-msgid "submit"
-msgstr ""
-
-#: templates/chatgpt.html:33
-msgid "continue"
-msgstr ""
-
-#: templates/chatgpt.html:54
-msgid "Summarization?"
-msgstr ""
-
-#: templates/chatgpt.html:63
-msgid "audio"
-msgstr ""
-
-#: templates/login.html:5 templates/login.html:28
-msgid "Login"
-msgstr ""
-
-#: templates/login.html:15
-msgid "Chat API Login"
-msgstr ""
-
-#: templates/login.html:18 templates/register_user.html:19
-msgid "Login ID"
-msgstr ""
-
-#: templates/login.html:23 templates/register_user.html:26
-msgid "Password"
-msgstr ""
-
-#: templates/moderation.html:5 templates/moderation.html:18
-msgid "Moderation API"
-msgstr ""
-
-#: templates/moderation.html:5
+#: templates/chatgpt.html:5 templates/croptest.html:5 templates/login.html:5
+#: templates/moderation.html:5 templates/register_user.html:5
+#: templates/registration_code.html:5 templates/registration_code_list.html:5
+#: templates/roleplayer.html:5 templates/system_prompt.html:5
+#: templates/system_prompt_list.html:5
 msgid "ChatGPT API Chat"
 msgstr ""
 
-#: templates/moderation.html:22 templates/system_prompt.html:26
+#: templates/chatgpt.html:11
+msgid "Chat Name"
+msgstr ""
+
+#: templates/chatgpt.html:12
+msgid "new chat"
+msgstr ""
+
+#: templates/chatgpt.html:14
+msgid "voice REC"
+msgstr ""
+
+#: templates/chatgpt.html:24
+msgid "submit"
+msgstr ""
+
+#: templates/chatgpt.html:28
+msgid "continue"
+msgstr ""
+
+#: templates/chatgpt.html:49
+msgid "Summarization?"
+msgstr ""
+
+#: templates/chatgpt.html:58
+msgid "audio"
+msgstr ""
+
+#: templates/chatgpt.html:77
+msgid "Select System Prompt"
+msgstr ""
+
+#: templates/chatgpt.html:81
+msgid "(Default)"
+msgstr ""
+
+#: templates/chatgpt.html:91
+msgid "Custom System Prompt"
+msgstr ""
+
+#: templates/chatgpt.html:104
+msgid "Word Replacing"
+msgstr ""
+
+#: templates/chatgpt.html:116
+msgid "Copy Messages"
+msgstr ""
+
+#: templates/chatgpt.html:119
+msgid "Assistant's Only"
+msgstr ""
+
+#: templates/chatgpt.html:120
+msgid "All"
+msgstr ""
+
+#: templates/chatgpt.html:126
+msgid "Select Face Pic"
+msgstr ""
+
+#: templates/chatgpt.html:130
+msgid "Save Pic"
+msgstr ""
+
+#: templates/chatgpt.html:131
+msgid "Attempt Pic Only"
+msgstr ""
+
+#: templates/chatgpt.html:132
+msgid "Deselect"
+msgstr ""
+
+#: templates/chatgpt.html:144
+msgid "System Prompt Panel"
+msgstr ""
+
+#: templates/chatgpt.html:149
+msgid "Save Prompt"
+msgstr ""
+
+#: templates/chatgpt.html:150
+msgid "Undo by Default"
+msgstr ""
+
+#: templates/chatgpt.html:151
+msgid "Undo by Saved"
+msgstr ""
+
+#: templates/chatgpt.html:152
+msgid "Close Panel"
+msgstr ""
+
+#: templates/chatgpt.html:158
+msgid "Word Replace Settings Panel"
+msgstr ""
+
+#: templates/chatgpt.html:164
+msgid "Which?"
+msgstr ""
+
+#: templates/chatgpt.html:165
+msgid "Browser"
+msgstr ""
+
+#: templates/chatgpt.html:166
+msgid "Server"
+msgstr ""
+
+#: templates/chatgpt.html:181
+msgid "Add Row"
+msgstr ""
+
+#: templates/chatgpt.html:182
+msgid "Save Word Replacing"
+msgstr ""
+
+#: templates/login.html:5 templates/login.html:25
+msgid "Login"
+msgstr ""
+
+#: templates/login.html:11
+msgid "Chat API Login"
+msgstr ""
+
+#: templates/login.html:14 templates/register_user.html:15
+msgid "Login ID"
+msgstr ""
+
+#: templates/login.html:19 templates/register_user.html:22
+msgid "Password"
+msgstr ""
+
+#: templates/moderation.html:5 templates/moderation.html:13
+msgid "Moderation API"
+msgstr ""
+
+#: templates/moderation.html:17 templates/system_prompt.html:22
 msgid "Prompt Content"
 msgstr ""
 
-#: templates/moderation.html:32
+#: templates/moderation.html:27
 msgid "Select Moderation Model:"
 msgstr ""
 
-#: templates/moderation.html:46 templates/system_prompt.html:80
+#: templates/moderation.html:41 templates/system_prompt.html:76
 msgid "Check Moderation"
 msgstr ""
 
-#: templates/moderation.html:47
+#: templates/moderation.html:42
 msgid "Cleanup Prompt"
 msgstr ""
 
-#: templates/moderation.html:48 templates/system_prompt.html:73
+#: templates/moderation.html:43 templates/system_prompt.html:69
 msgid "Download TXT"
 msgstr ""
 
-#: templates/moderation.html:49 templates/system_prompt.html:74
+#: templates/moderation.html:44 templates/system_prompt.html:70
 msgid "Download MD"
 msgstr ""
 
-#: templates/moderation.html:50 templates/system_prompt.html:75
+#: templates/moderation.html:45 templates/system_prompt.html:71
 msgid "Copy To Clipboard"
 msgstr ""
 
-#: templates/register_user.html:5 templates/register_user.html:15
-#: templates/register_user.html:41
+#: templates/register_user.html:5 templates/register_user.html:11
+#: templates/register_user.html:37
 msgid "Register User"
 msgstr ""
 
-#: templates/register_user.html:33
+#: templates/register_user.html:29
 msgid "User Name"
 msgstr ""
 
-#: templates/registration_code.html:5 templates/registration_code.html:15
-#: templates/registration_code.html:19 templates/registration_code_list.html:22
+#: templates/registration_code.html:5 templates/registration_code.html:11
+#: templates/registration_code.html:15 templates/registration_code_list.html:18
 msgid "Registration Code"
 msgstr ""
 
-#: templates/registration_code.html:24 templates/registration_code_list.html:23
+#: templates/registration_code.html:20 templates/registration_code_list.html:19
 msgid "Remarks"
 msgstr ""
 
-#: templates/registration_code.html:29 templates/registration_code_list.html:27
+#: templates/registration_code.html:25 templates/registration_code_list.html:23
 msgid "Expiration Time"
 msgstr ""
 
-#: templates/registration_code.html:34
+#: templates/registration_code.html:30
 msgid "Role"
 msgstr ""
 
-#: templates/registration_code.html:42 templates/registration_code_list.html:45
+#: templates/registration_code.html:38 templates/registration_code_list.html:41
 msgid "Add Code"
 msgstr ""
 
 #: templates/registration_code_list.html:5
-#: templates/registration_code_list.html:15
+#: templates/registration_code_list.html:11
 msgid "Registration Code List"
 msgstr ""
 
-#: templates/registration_code_list.html:18
+#: templates/registration_code_list.html:14
 msgid "Registration code has not been registered yet."
 msgstr ""
 
-#: templates/registration_code_list.html:24
+#: templates/registration_code_list.html:20
 msgid "Is Used"
 msgstr ""
 
-#: templates/registration_code_list.html:25
+#: templates/registration_code_list.html:21
 msgid "Name of the user who Added this"
 msgstr ""
 
-#: templates/registration_code_list.html:26
+#: templates/registration_code_list.html:22
 msgid "Issuing Time"
 msgstr ""
 
-#: templates/registration_code_list.html:28
+#: templates/registration_code_list.html:24
 msgid "Roles"
 msgstr ""
 
-#: templates/roleplayer.html:5 templates/roleplayer.html:17
+#: templates/roleplayer.html:5 templates/roleplayer.html:12
 msgid "Roleplayer"
 msgstr ""
 
-#: templates/roleplayer.html:21
+#: templates/roleplayer.html:16
 msgid "Roleplayer Name"
 msgstr ""
 
-#: templates/roleplayer.html:27
+#: templates/roleplayer.html:22
 msgid "Roleplayer Icon"
 msgstr ""
 
-#: templates/roleplayer.html:29
+#: templates/roleplayer.html:24
 msgid "Icon Setting"
 msgstr ""
 
-#: templates/roleplayer.html:32
+#: templates/roleplayer.html:27
 msgid "Roleplayer Memo"
 msgstr ""
 
-#: templates/roleplayer.html:39 templates/system_prompt.html:33
+#: templates/roleplayer.html:34 templates/system_prompt.html:29
 msgid "This prompt is locked?"
 msgstr ""
 
-#: templates/roleplayer.html:44 templates/system_prompt.html:38
+#: templates/roleplayer.html:39 templates/system_prompt.html:34
 msgid "Everyone can see?"
 msgstr ""
 
-#: templates/roleplayer.html:48 templates/system_prompt.html:42
-#: templates/system_prompt_list.html:25
+#: templates/roleplayer.html:43 templates/system_prompt.html:38
+#: templates/system_prompt_list.html:20
 msgid "Everyone can edit?"
 msgstr ""
 
-#: templates/roleplayer.html:52 templates/system_prompt.html:46
-#: templates/system_prompt_list.html:23
+#: templates/roleplayer.html:47 templates/system_prompt.html:42
+#: templates/system_prompt_list.html:18
 msgid "Owner User"
 msgstr ""
 
-#: templates/roleplayer.html:56 templates/system_prompt.html:50
-#: templates/system_prompt_list.html:26
+#: templates/roleplayer.html:51 templates/system_prompt.html:46
+#: templates/system_prompt_list.html:21
 msgid "Last Updated"
 msgstr ""
 
-#: templates/roleplayer.html:60 templates/system_prompt.html:54
+#: templates/roleplayer.html:55 templates/system_prompt.html:50
 msgid "Updated User"
 msgstr ""
 
-#: templates/roleplayer.html:75
+#: templates/roleplayer.html:70
 msgid "Register Roleplayer"
 msgstr ""
 
-#: templates/roleplayer.html:77
+#: templates/roleplayer.html:72
 msgid "Edit Roleplayer"
 msgstr ""
 
-#: templates/roleplayer.html:80 templates/system_prompt.html:77
+#: templates/roleplayer.html:75 templates/system_prompt.html:73
 msgid "Revert"
 msgstr ""
 
-#: templates/roleplayer.html:81
+#: templates/roleplayer.html:76
 msgid "Delete Roleplayer"
 msgstr ""
 
-#: templates/system_prompt.html:5 templates/system_prompt.html:17
+#: templates/system_prompt.html:5 templates/system_prompt.html:13
 msgid "System Prompt"
 msgstr ""
 
-#: templates/system_prompt.html:21 templates/system_prompt_list.html:22
+#: templates/system_prompt.html:17 templates/system_prompt_list.html:17
 msgid "Prompt Name"
 msgstr ""
 
-#: templates/system_prompt.html:69
+#: templates/system_prompt.html:65
 msgid "Register Prompt"
 msgstr ""
 
-#: templates/system_prompt.html:71
+#: templates/system_prompt.html:67
 msgid "Edit Prompt"
 msgstr ""
 
-#: templates/system_prompt.html:78
+#: templates/system_prompt.html:74
 msgid "Delete Prompt"
 msgstr ""
 
@@ -311,23 +403,23 @@ msgstr ""
 msgid "Systme Prompot List"
 msgstr ""
 
-#: templates/system_prompt_list.html:18
+#: templates/system_prompt_list.html:13
 msgid "System prompt has not been registered yet."
 msgstr ""
 
-#: templates/system_prompt_list.html:24
+#: templates/system_prompt_list.html:19
 msgid "My Prompt"
 msgstr ""
 
-#: templates/system_prompt_list.html:27
+#: templates/system_prompt_list.html:22
 msgid "Last Updated User"
 msgstr ""
 
-#: templates/system_prompt_list.html:28 templates/system_prompt_list.html:38
+#: templates/system_prompt_list.html:23 templates/system_prompt_list.html:33
 msgid "Detail"
 msgstr ""
 
-#: templates/system_prompt_list.html:45
+#: templates/system_prompt_list.html:40
 msgid "Add System Prompt"
 msgstr ""
 
@@ -355,12 +447,20 @@ msgstr ""
 msgid "Prompt List"
 msgstr ""
 
-#: templates/parts/common_scripts.html:29
-#: templates/parts/common_scripts.html:51
+#: templates/parts/common_scripts.html:20
+msgid "Moderation"
+msgstr ""
+
+#: templates/parts/common_scripts.html:21
+msgid "Logout"
+msgstr ""
+
+#: templates/parts/common_scripts.html:31
+#: templates/parts/common_scripts.html:53
 msgid "OK"
 msgstr ""
 
-#: templates/parts/common_scripts.html:54
+#: templates/parts/common_scripts.html:56
 msgid "Cancel"
 msgstr ""
 

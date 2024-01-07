@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-01-06 18:41+0900\n"
+"POT-Creation-Date: 2024-01-07 13:38+0900\n"
 "PO-Revision-Date: 2023-07-20 18:42+0900\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ja\n"
@@ -86,225 +86,320 @@ msgid ""
 "detail."
 msgstr "死、暴力、身体への傷害を詳細に描写するコンテンツ。"
 
-#: templates/chat_list.html:16
+#: templates/chat_list.html:11
 msgid "No chat yet."
 msgstr "Chatチャットがありません。"
 
-#: templates/chatgpt.html:16
+#: templates/chatgpt.html:5 templates/croptest.html:5 templates/login.html:5
+#: templates/moderation.html:5 templates/register_user.html:5
+#: templates/registration_code.html:5 templates/registration_code_list.html:5
+#: templates/roleplayer.html:5 templates/system_prompt.html:5
+#: templates/system_prompt_list.html:5
+msgid "ChatGPT API Chat"
+msgstr "AI Chat"
+
+#: templates/chatgpt.html:11
 msgid "Chat Name"
 msgstr "チャット名"
 
-#: templates/chatgpt.html:17
+#: templates/chatgpt.html:12
 msgid "new chat"
 msgstr "New Chat"
 
-#: templates/chatgpt.html:19
+#: templates/chatgpt.html:14
 msgid "voice REC"
 msgstr "声で送る"
 
-#: templates/chatgpt.html:29
+#: templates/chatgpt.html:24
 msgid "submit"
 msgstr "Say!"
 
-#: templates/chatgpt.html:33
+#: templates/chatgpt.html:28
 msgid "continue"
 msgstr ""
 
-#: templates/chatgpt.html:54
+#: templates/chatgpt.html:49
 msgid "Summarization?"
 msgstr "要約する？"
 
-#: templates/chatgpt.html:63
+#: templates/chatgpt.html:58
 msgid "audio"
 msgstr "しゃべる"
 
-#: templates/login.html:5 templates/login.html:28
+#: templates/chatgpt.html:77
+msgid "Select System Prompt"
+msgstr "プロンプトを選択"
+
+#: templates/chatgpt.html:81
+msgid "(Default)"
+msgstr "(デフォルト)"
+
+#: templates/chatgpt.html:91
+msgid "Custom System Prompt"
+msgstr "プロンプトを編集"
+
+#: templates/chatgpt.html:104
+msgid "Word Replacing"
+msgstr "ワード置換"
+
+#: templates/chatgpt.html:116
+msgid "Copy Messages"
+msgstr "メッセージコピー"
+
+#: templates/chatgpt.html:119
+msgid "Assistant's Only"
+msgstr "Assistantのみ"
+
+#: templates/chatgpt.html:120
+msgid "All"
+msgstr "すべて"
+
+#: templates/chatgpt.html:126
+msgid "Select Face Pic"
+msgstr "顔写真を選択"
+
+#: templates/chatgpt.html:130
+msgid "Save Pic"
+msgstr "写真を保存"
+
+#: templates/chatgpt.html:131
+msgid "Attempt Pic Only"
+msgstr "適用のみ"
+
+#: templates/chatgpt.html:132
+msgid "Deselect"
+msgstr "選択を解除"
+
+#: templates/chatgpt.html:144
+msgid "System Prompt Panel"
+msgstr "プロンプトパネル"
+
+#: templates/chatgpt.html:149
+msgid "Save Prompt"
+msgstr "プロンプトを保存"
+
+#: templates/chatgpt.html:150
+msgid "Undo by Default"
+msgstr "デフォルトに戻す"
+
+#: templates/chatgpt.html:151
+msgid "Undo by Saved"
+msgstr "保存している内容に戻す"
+
+#: templates/chatgpt.html:152
+msgid "Close Panel"
+msgstr "パネルを閉じる"
+
+#: templates/chatgpt.html:158
+msgid "Word Replace Settings Panel"
+msgstr "ワード置換パネル"
+
+#: templates/chatgpt.html:164
+msgid "Which?"
+msgstr ""
+
+#: templates/chatgpt.html:165
+msgid "Browser"
+msgstr "ブラウザ側"
+
+#: templates/chatgpt.html:166
+#, fuzzy
+msgid "Server"
+msgstr "サーバー側"
+
+#: templates/chatgpt.html:181
+#, fuzzy
+msgid "Add Row"
+msgstr "行を追加"
+
+#: templates/chatgpt.html:182
+#, fuzzy
+msgid "Save Word Replacing"
+msgstr "ワード置換を保存"
+
+#: templates/login.html:5 templates/login.html:25
 msgid "Login"
 msgstr "ログイン"
 
-#: templates/login.html:15
+#: templates/login.html:11
 msgid "Chat API Login"
 msgstr "ログイン"
 
-#: templates/login.html:18 templates/register_user.html:19
+#: templates/login.html:14 templates/register_user.html:15
 msgid "Login ID"
 msgstr "ログインID"
 
-#: templates/login.html:23 templates/register_user.html:26
+#: templates/login.html:19 templates/register_user.html:22
 msgid "Password"
 msgstr "パスワード"
 
-#: templates/moderation.html:5 templates/moderation.html:18
+#: templates/moderation.html:5 templates/moderation.html:13
 msgid "Moderation API"
 msgstr "モデレーションチェック"
 
-#: templates/moderation.html:5
-msgid "ChatGPT API Chat"
-msgstr "ログイン"
-
-#: templates/moderation.html:22 templates/system_prompt.html:26
+#: templates/moderation.html:17 templates/system_prompt.html:22
 msgid "Prompt Content"
 msgstr "プロンプトの内容"
 
-#: templates/moderation.html:32
+#: templates/moderation.html:27
 msgid "Select Moderation Model:"
 msgstr "モデレーションモデルの選択"
 
-#: templates/moderation.html:46 templates/system_prompt.html:80
+#: templates/moderation.html:41 templates/system_prompt.html:76
 msgid "Check Moderation"
 msgstr "モデレーションを行う"
 
-#: templates/moderation.html:47
+#: templates/moderation.html:42
 msgid "Cleanup Prompt"
 msgstr "ゴミ消し"
 
-#: templates/moderation.html:48 templates/system_prompt.html:73
+#: templates/moderation.html:43 templates/system_prompt.html:69
 msgid "Download TXT"
 msgstr "プロンプトをダウンロード(.txt)"
 
-#: templates/moderation.html:49 templates/system_prompt.html:74
+#: templates/moderation.html:44 templates/system_prompt.html:70
 msgid "Download MD"
 msgstr "プロンプトをダウンロード(.md)"
 
-#: templates/moderation.html:50 templates/system_prompt.html:75
+#: templates/moderation.html:45 templates/system_prompt.html:71
 msgid "Copy To Clipboard"
 msgstr "プロンプトをクリップボードにコピー"
 
-#: templates/register_user.html:5 templates/register_user.html:15
-#: templates/register_user.html:41
+#: templates/register_user.html:5 templates/register_user.html:11
+#: templates/register_user.html:37
 msgid "Register User"
 msgstr "ユーザーを登録する"
 
-#: templates/register_user.html:33
+#: templates/register_user.html:29
 msgid "User Name"
 msgstr "ユーザー名"
 
-#: templates/registration_code.html:5 templates/registration_code.html:15
-#: templates/registration_code.html:19 templates/registration_code_list.html:22
+#: templates/registration_code.html:5 templates/registration_code.html:11
+#: templates/registration_code.html:15 templates/registration_code_list.html:18
 msgid "Registration Code"
 msgstr "登録コード"
 
-#: templates/registration_code.html:24 templates/registration_code_list.html:23
+#: templates/registration_code.html:20 templates/registration_code_list.html:19
 msgid "Remarks"
 msgstr "備考"
 
-#: templates/registration_code.html:29 templates/registration_code_list.html:27
+#: templates/registration_code.html:25 templates/registration_code_list.html:23
 msgid "Expiration Time"
 msgstr "有効期限"
 
-#: templates/registration_code.html:34
+#: templates/registration_code.html:30
 msgid "Role"
 msgstr "ロール"
 
-#: templates/registration_code.html:42 templates/registration_code_list.html:45
+#: templates/registration_code.html:38 templates/registration_code_list.html:41
 msgid "Add Code"
 msgstr "登録コード追加"
 
 #: templates/registration_code_list.html:5
-#: templates/registration_code_list.html:15
+#: templates/registration_code_list.html:11
 msgid "Registration Code List"
 msgstr "登録コード一覧"
 
-#: templates/registration_code_list.html:18
+#: templates/registration_code_list.html:14
 msgid "Registration code has not been registered yet."
 msgstr "登録コードはまだ登録されていません。"
 
-#: templates/registration_code_list.html:24
+#: templates/registration_code_list.html:20
 msgid "Is Used"
 msgstr "使用済み"
 
-#: templates/registration_code_list.html:25
+#: templates/registration_code_list.html:21
 msgid "Name of the user who Added this"
 msgstr "追加したユーザー"
 
-#: templates/registration_code_list.html:26
+#: templates/registration_code_list.html:22
 msgid "Issuing Time"
 msgstr "使用された日時"
 
-#: templates/registration_code_list.html:28
+#: templates/registration_code_list.html:24
 msgid "Roles"
 msgstr "ロール"
 
-#: templates/roleplayer.html:5 templates/roleplayer.html:17
+#: templates/roleplayer.html:5 templates/roleplayer.html:12
 msgid "Roleplayer"
 msgstr ""
 
-#: templates/roleplayer.html:21
+#: templates/roleplayer.html:16
 msgid "Roleplayer Name"
 msgstr "ロールプレイヤー名"
 
-#: templates/roleplayer.html:27
+#: templates/roleplayer.html:22
 msgid "Roleplayer Icon"
 msgstr ""
 
-#: templates/roleplayer.html:29
+#: templates/roleplayer.html:24
 msgid "Icon Setting"
 msgstr ""
 
-#: templates/roleplayer.html:32
+#: templates/roleplayer.html:27
 msgid "Roleplayer Memo"
 msgstr ""
 
-#: templates/roleplayer.html:39 templates/system_prompt.html:33
+#: templates/roleplayer.html:34 templates/system_prompt.html:29
 msgid "This prompt is locked?"
 msgstr ""
 
-#: templates/roleplayer.html:44 templates/system_prompt.html:38
+#: templates/roleplayer.html:39 templates/system_prompt.html:34
 msgid "Everyone can see?"
 msgstr "全員が参照できる？"
 
-#: templates/roleplayer.html:48 templates/system_prompt.html:42
-#: templates/system_prompt_list.html:25
+#: templates/roleplayer.html:43 templates/system_prompt.html:38
+#: templates/system_prompt_list.html:20
 msgid "Everyone can edit?"
 msgstr "全員が編集できる？"
 
-#: templates/roleplayer.html:52 templates/system_prompt.html:46
-#: templates/system_prompt_list.html:23
+#: templates/roleplayer.html:47 templates/system_prompt.html:42
+#: templates/system_prompt_list.html:18
 msgid "Owner User"
 msgstr "オーナーユーザー"
 
-#: templates/roleplayer.html:56 templates/system_prompt.html:50
-#: templates/system_prompt_list.html:26
+#: templates/roleplayer.html:51 templates/system_prompt.html:46
+#: templates/system_prompt_list.html:21
 msgid "Last Updated"
 msgstr "最終更新日時"
 
-#: templates/roleplayer.html:60 templates/system_prompt.html:54
+#: templates/roleplayer.html:55 templates/system_prompt.html:50
 msgid "Updated User"
 msgstr "最終更新ユーザー"
 
-#: templates/roleplayer.html:75
+#: templates/roleplayer.html:70
 msgid "Register Roleplayer"
 msgstr "ロールプレイヤーを登録"
 
-#: templates/roleplayer.html:77
+#: templates/roleplayer.html:72
 msgid "Edit Roleplayer"
 msgstr "ロールプレイヤーを編集"
 
-#: templates/roleplayer.html:80 templates/system_prompt.html:77
+#: templates/roleplayer.html:75 templates/system_prompt.html:73
 msgid "Revert"
 msgstr "編集前に戻す"
 
-#: templates/roleplayer.html:81
+#: templates/roleplayer.html:76
 msgid "Delete Roleplayer"
 msgstr ""
 
-#: templates/system_prompt.html:5 templates/system_prompt.html:17
+#: templates/system_prompt.html:5 templates/system_prompt.html:13
 msgid "System Prompt"
 msgstr "システムプロンプト"
 
-#: templates/system_prompt.html:21 templates/system_prompt_list.html:22
+#: templates/system_prompt.html:17 templates/system_prompt_list.html:17
 msgid "Prompt Name"
 msgstr "プロンプト名"
 
-#: templates/system_prompt.html:69
+#: templates/system_prompt.html:65
 msgid "Register Prompt"
 msgstr "プロンプトを登録"
 
-#: templates/system_prompt.html:71
+#: templates/system_prompt.html:67
 msgid "Edit Prompt"
 msgstr "プロンプトを編集"
 
-#: templates/system_prompt.html:78
+#: templates/system_prompt.html:74
 msgid "Delete Prompt"
 msgstr "プロンプトを削除"
 
@@ -312,23 +407,23 @@ msgstr "プロンプトを削除"
 msgid "Systme Prompot List"
 msgstr "システムプロンプト一覧"
 
-#: templates/system_prompt_list.html:18
+#: templates/system_prompt_list.html:13
 msgid "System prompt has not been registered yet."
 msgstr "システムプロンプトはまだ登録されていません。"
 
-#: templates/system_prompt_list.html:24
+#: templates/system_prompt_list.html:19
 msgid "My Prompt"
 msgstr "自分のプロンプト"
 
-#: templates/system_prompt_list.html:27
+#: templates/system_prompt_list.html:22
 msgid "Last Updated User"
 msgstr "最終更新ユーザー"
 
-#: templates/system_prompt_list.html:28 templates/system_prompt_list.html:38
+#: templates/system_prompt_list.html:23 templates/system_prompt_list.html:33
 msgid "Detail"
 msgstr "詳細"
 
-#: templates/system_prompt_list.html:45
+#: templates/system_prompt_list.html:40
 msgid "Add System Prompt"
 msgstr "システムプロンプトを追加する"
 
@@ -350,21 +445,53 @@ msgstr "Chatリスト"
 
 #: templates/parts/common_scripts.html:18
 msgid "New Prompt"
-msgstr "システムプロンプトを作成"
+msgstr "プロンプトを作成"
 
 #: templates/parts/common_scripts.html:19
 msgid "Prompt List"
-msgstr "システムプロンプト一覧"
+msgstr "プロンプト一覧"
 
-#: templates/parts/common_scripts.html:29
-#: templates/parts/common_scripts.html:51
+#: templates/parts/common_scripts.html:20
+msgid "Moderation"
+msgstr "モデレーション"
+
+#: templates/parts/common_scripts.html:21
+msgid "Logout"
+msgstr "ログアウト"
+
+#: templates/parts/common_scripts.html:31
+#: templates/parts/common_scripts.html:53
 msgid "OK"
 msgstr ""
 
-#: templates/parts/common_scripts.html:54
+#: templates/parts/common_scripts.html:56
 msgid "Cancel"
 msgstr ""
 
-#~ msgid "clear chat"
-#~ msgstr "Clear Chat"
+#~ msgid "Chat Name"
+#~ msgstr "チャット名"
+
+#~ msgid "new chat"
+#~ msgstr "New Chat"
+
+#~ msgid "voice REC"
+#~ msgstr "声で送る"
+
+#~ msgid "submit"
+#~ msgstr "Say!"
+
+#~ msgid "continue"
+#~ msgstr ""
+
+#~ msgid "Summarization?"
+#~ msgstr "要約する？"
+
+#~ msgid "audio"
+#~ msgstr "しゃべる"
+
+#~ msgid "Save Word Replacing Settings"
+#~ msgstr "保存"
+
+#~ msgid "Apply"
+#~ msgstr ""
 

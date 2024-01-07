@@ -6,7 +6,7 @@ from .utils.moderation_commons import check_moderation_main, get_moderation_resu
 import os
 
 @app.route('/moderation/', methods=['GET'])
-def system_prompt_detail_show_free():
+def get_moderation_view_show():
 
     csrf_token = generate_random_string(48)  # CSRF対策にランダムなシークレットキーを設定
     session['moderation_csrf_token'] = csrf_token

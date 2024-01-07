@@ -98,16 +98,52 @@ button.register, button.edit {
 /* メニューのスタイル */
 .menu-content {
     display: none;
-    width: 130px;
-    height: 300px;
+    width: 200px;
+    height: 400px;
     cursor: pointer;
+    background-color: white;
     /* display: flex;
     flex-direction: column; */
     justify-content: space-between;
     position: fixed;
-    top: 40px;
+    top: 50px;
     right: 10px; /* 右上に配置 */
     z-index: 9999; /* オーバーレイの可能性を考慮してz-indexを設定 */
+}
+
+.menu-content li {
+    list-style-type: none;
+    display: block;
+    background-color: #ffdddd;
+    height: 30px;
+    font-size: small;
+    text-align: center;
+    margin: 2px;
+    transition: all 0.3s ease; /* なめらかな遷移効果 */
+}
+
+.menu-content li a {
+    display: flex;
+    align-items: center; /* 上下中央 */
+    justify-content: center; /* 左右中央 */
+    height: 100%;
+    color: #330000;
+    text-decoration: none; /* 下線を消す */
+}
+
+/* .menu-content li a span {
+    display: inline-block;
+    margin: 0 auto;
+} */
+
+/* a:link, a:visited, a:hover, a:active {
+    text-decoration: none;
+} */
+
+.side-menu li a:active {
+    background-color: #ccc; /* 背景色を変更 */
+    color: #333; /* テキストの色を変更 */
+    transform: scale(0.95); /* 少し縮小させる */
 }
 
 .bg_red {
