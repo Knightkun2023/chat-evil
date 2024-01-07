@@ -6,6 +6,7 @@ from sqlalchemy import func
 from sqlalchemy.orm import aliased
 from flask_login import login_required, current_user
 from .utils.commons import is_empty, generate_random_string, is_numeric, get_current_time, checkbox_to_save
+from .utils.session_manager import set_session_for_csrf_token, get_session_for_csrf_token
 import json, logging
 
 @app.route('/prompt/list', methods=['GET'])
@@ -54,7 +55,8 @@ def system_prompt_list():
 def system_prompt_detail_show(prompt_id):
 
     csrf_token = generate_random_string(48)  # CSRF対策にランダムなシークレットキーを設定
-    session['system_prompt_csrf_token'] = csrf_token
+    # session['system_prompt_csrf_token'] = csrf_token
+    set_session_for_csrf_token('system_prompt_csrf_token', csrf_token)
 
     if is_empty(prompt_id):
         # 新規登録
@@ -132,7 +134,7 @@ def system_prompt_detail():
     csrf_token = data['csrf_token']
 
     # CSRFトークンのチェック
-    if not session['system_prompt_csrf_token'] == csrf_token:
+    if get_session_for_csrf_token('system_prompt_csrf_token') != csrf_token:
         dic = {}
         dic['main_error_message'] = 'Invalid access.'
         return jsonify(dic), 403  # 不正なアクセス
@@ -169,8 +171,11 @@ def system_prompt_detail():
         ).one_or_none()
         app_logger.debug(f'@@@@@@@@@@@ rs={rs}')
         prompt_id = 1
-        if rs:
+        if rs[0] is not None:
+            app_logger.debug(f'@@@@@@@@@@@ rs[0]={str(rs[0])}')
             prompt_id = prompt_id + rs[0]
+
+        app_logger.debug(f'@@@@@@@@@@@ prompt_id={str(prompt_id)}')
 
         prompt = SystemPrompts(
                     prompt_id=prompt_id,
@@ -257,7 +262,7 @@ def delete_prompt():
     csrf_token = data['csrf_token']
 
     # CSRFトークンのチェック
-    if not session['system_prompt_csrf_token'] == csrf_token:
+    if get_session_for_csrf_token('system_prompt_csrf_token') != csrf_token:
         dic = {}
         dic['main_error_message'] = 'Invalid access.'
         return jsonify(dic), 403  # 不正なアクセス

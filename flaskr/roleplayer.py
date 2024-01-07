@@ -6,6 +6,7 @@ from sqlalchemy import func
 from sqlalchemy.orm import aliased
 from flask_login import login_required, current_user
 from .utils.commons import is_empty, generate_random_string, is_numeric, get_current_time, checkbox_to_save, create_error_info, set_message_to_session, set_message_to_session
+from .utils.session_manager import set_session_for_csrf_token, get_session_for_csrf_token
 import json, logging
 
 @app.route('/roleplayer/list', methods=['GET'])
@@ -58,7 +59,8 @@ def roleplayer_list():
 def roleplayer_detail_show(roleplayer_id):
 
     csrf_token = generate_random_string(48)  # CSRF対策にランダムなシークレットキーを設定
-    session['roleplayer_csrf_token'] = csrf_token
+    # session['roleplayer_csrf_token'] = csrf_token
+    set_session_for_csrf_token('roleplayer_csrf_token', csrf_token)
 
     if is_empty(roleplayer_id):
         # 新規登録
@@ -138,7 +140,7 @@ def roleplayer_detail():
     csrf_token = data['csrf_token']
 
     # CSRFトークンのチェック
-    if not session['roleplayer_csrf_token'] == csrf_token:
+    if get_session_for_csrf_token('roleplayer_csrf_token') != csrf_token:
         dic = {}
         dic['main_error_message'] = 'Invalid access.'
         return jsonify(dic), 403  # 不正なアクセス
@@ -182,7 +184,7 @@ def roleplayer_detail():
         ).one_or_none()
         app_logger.debug(f'@@@@@@@@@@@ rs={rs}')
         roleplayer_id = 1
-        if rs:
+        if rs[0] is not None:
             roleplayer_id = roleplayer_id + rs[0]
 
         new_roleplayer = Roleplayers(
@@ -280,7 +282,7 @@ def delete_prompt():
     csrf_token = data['csrf_token']
 
     # CSRFトークンのチェック
-    if not session['roleplayer_csrf_token'] == csrf_token:
+    if get_session_for_csrf_token('roleplayer_csrf_token') != csrf_token:
         response_code = 403
         message = 'Invalid access.'
         error_info = create_error_info(message = message, status = response_code, path = '/roleplayer/delete')

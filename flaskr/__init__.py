@@ -11,6 +11,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 app.config['REMOTE_URL'] = os.environ['REMOTE_URL']
+app.config['SESSION_COOKIE_PATH'] = '/'
 CORS(app, resources={
     # r"/moderation/check2": {
     #     "origins": "https://chat.openai.com",

@@ -1073,7 +1073,9 @@ $('#btn_newchat').click(function() {
     $('#contents_field').empty();
 
     setupNewChatUUID();
-    initCustomizeSystemPrompt();
+
+    // ブラウザを再読み込みしする。
+    window.location.reload();
 });
 
 if (!document.location.href.includes('/?chat_uuid=')) {

@@ -3,13 +3,15 @@ from flask_login import current_user
 from . import app
 from .utils.commons import generate_random_string, get_query_param_from_url, create_error_info
 from .utils.moderation_commons import check_moderation_main, get_moderation_result
+from .utils.session_manager import set_session_for_csrf_token, get_session_for_csrf_token
 import os
 
 @app.route('/moderation/', methods=['GET'])
 def get_moderation_view_show():
 
     csrf_token = generate_random_string(48)  # CSRF対策にランダムなシークレットキーを設定
-    session['moderation_csrf_token'] = csrf_token
+    # session['moderation_csrf_token'] = csrf_token
+    set_session_for_csrf_token('moderation_csrf_token', csrf_token)
 
     free_key = request.args.get('p', '')
     if free_key in app.config['MODERATION_CREDENTIALS']:
@@ -33,7 +35,9 @@ def check_moderation():
     if 'csrf_token' in data:
         # CSRFトークンが渡された場合：
         csrf_token = data['csrf_token']
-        if session['moderation_csrf_token'] == csrf_token:
+        if get_session_for_csrf_token('moderation_csrf_token') == csrf_token:
+            authorized = True
+        elif get_session_for_csrf_token('system_prompt_csrf_token') == csrf_token:
             authorized = True
 
     if not authorized:

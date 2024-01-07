@@ -8,19 +8,14 @@ $(document).ready(function() {
         // メニューコンテンツの表示・非表示を切り替える
         $(".menu-content").toggle();
     });
-});
 
-// function getCurrentDateTime() {
-//     var now = new Date();
-//     var year = now.getFullYear();
-//     var month = ("0" + (now.getMonth() + 1)).slice(-2); // Months are zero indexed, so we add 1
-//     var day = ("0" + now.getDate()).slice(-2);
-//     var hour = ("0" + now.getHours()).slice(-2);
-//     var minute = ("0" + now.getMinutes()).slice(-2);
-//     var second = ("0" + now.getSeconds()).slice(-2);
-//     var millisecond = ("00" + now.getMilliseconds()).slice(-3); // Milliseconds can be 1-3 digits long
-//     return "" + year + month + day + hour + minute + second + millisecond;
-// }
+    // メニュー外をクリックしたときのイベント
+    $(document).on('click', function(event) {
+        if (!$(event.target).closest('.menu-content, .hamburger-menu').length) {
+        $('.menu-content').hide(); // メニューを非表示にする
+        }
+    });
+});
 
 function getCurrentDateTime() {
     var now = new Date();

@@ -98,10 +98,10 @@ button.register, button.edit {
 /* メニューのスタイル */
 .menu-content {
     display: none;
-    width: 200px;
-    height: 400px;
+    width: 240px;
+    /* height: 400px; */
     cursor: pointer;
-    background-color: white;
+    background-color: #fafafa;
     /* display: flex;
     flex-direction: column; */
     justify-content: space-between;
@@ -111,14 +111,19 @@ button.register, button.edit {
     z-index: 9999; /* オーバーレイの可能性を考慮してz-indexを設定 */
 }
 
+.menu-content ul {
+    margin: 0;
+    padding: 0
+}
+
 .menu-content li {
     list-style-type: none;
     display: block;
     background-color: #ffdddd;
-    height: 30px;
-    font-size: small;
+    height: 36px;
+    font-size: medium;
     text-align: center;
-    margin: 2px;
+    margin: 4px;
     transition: all 0.3s ease; /* なめらかな遷移効果 */
 }
 

@@ -1,8 +1,14 @@
 from flask import session
 from datetime import datetime
 from typing import Tuple
-import string, random, tiktoken, uuid, re
+import string, random, tiktoken, uuid, re, logging
 from urllib.parse import urlparse, parse_qs
+from enum import Enum
+
+class TimeConstants(Enum):
+    ONE_YEAR = 60 * 60 * 24 * 365   # 1年の秒数
+    THREE_HOURS = 60 * 60 * 3  # 3時間の秒数
+    FIVE_MINUTES = 60 * 5   # 5分の秒数
 
 def get_query_param_from_url(url, param_name):
     parsed_url = urlparse(url)
@@ -252,3 +258,22 @@ def get_message_from_session(domain: str, id='_') -> Tuple[str, str]:
     del session[domain][id]
     return message, error_message
 
+def check_datetime_str(s: str) -> bool:
+    app_logger = logging.getLogger('app_logger')
+    app_logger.debug(f'@@@@@@@@@@ s=[{s}]')
+    try:
+        expire_datetime = None
+        if len(s) == 14:
+            app_logger.debug(f'@@@@@@@@@@ len(s)=14')
+            expire_datetime = datetime.strptime(s, "%Y%m%d%H%M%S")
+            app_logger.debug(f'@@@@@@@@@@ expire_datetime(14)=[{str(expire_datetime)}]')
+        elif len(s) == 17:
+            app_logger.debug(f'@@@@@@@@@@ len(s)=17')
+            expire_datetime = datetime.strptime(s, "%Y%m%d%H%M%S%f")
+            app_logger.debug(f'@@@@@@@@@@ expire_datetime(17)=[{str(expire_datetime)}]')
+        
+        if expire_datetime is not None:
+            return True
+    except:
+        app_logger.debug(f'@@@@@@@@@@ except!')
+        return False

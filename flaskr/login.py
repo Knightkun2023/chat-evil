@@ -6,6 +6,7 @@ from . import app, db
 from .models.login_db import LoginUser, RegistrationCode, LoginHistory
 from datetime import datetime, timedelta
 from .utils.commons import is_empty, valid_datetime, is_numeric, get_current_time, generate_random_string, is_alpha_digits, get_display_time
+from .utils.session_manager import set_session_for_csrf_token, get_session_for_csrf_token
 from sqlalchemy.sql import func
 from urllib.parse import urlparse, urljoin
 
@@ -25,7 +26,8 @@ def login_show():
     if not is_empty(request.args.get('login_id', '')):
         login_id = request.args.get('login_id', '')
     csrf_token = generate_random_string(48)  # CSRF対策にランダムなシークレットキーを設定
-    session['login_csrf_token'] = csrf_token
+    # session['login_csrf_token'] = csrf_token
+    set_session_for_csrf_token('login_csrf_token', csrf_token)
     return render_template(
         'login.html', login_id=login_id, csrf_token=csrf_token
     )
@@ -43,7 +45,8 @@ def login_process():
         next_page = None
 
     # CSRFトークンのチェック
-    if not 'login_csrf_token' in session or not session['login_csrf_token'] == csrf_token:
+    app_logger.debug(f'login_csrf_token=[{csrf_token}]')
+    if get_session_for_csrf_token('login_csrf_token') != csrf_token:
         # CSRF token is not valid, show an error message or redirect
         app_logger.debug('ログイン失敗！ CSRFトークン不一致。')
         return jsonify({'main_error_message': 'Invalid username or password'}), 401  # ログイン失敗
@@ -51,8 +54,21 @@ def login_process():
     user = LoginUser.query.filter_by(user_id=user_id).order_by(LoginUser.revision.desc()).first()
 
     if user is not None and user.check_password(password):
+
+        # ユーザーが認証された後、現在のセッションデータを保持
+        session_data = session.copy()
+
+        # 既存のセッションを破棄
+        session.clear()
+        session.permanent = False
+
         login_user(user)
         app_logger.debug('ログイン成功！ user_no=' + str(user.user_no))
+
+        # セッションデータを新しいセッションに移動
+        for key, value in session_data.items():
+            app_logger.debug(f'sessionをコピー: key=[{key}], value=[{value}]')
+            session[key] = value
 
         # ログイン成功時の履歴を保存
         login_history = LoginHistory(
@@ -92,7 +108,8 @@ def login_process():
 
 @app.route('/logout')
 def logout_process():
-    session['login_id'] = current_user.user_id
+    if current_user.is_authenticated:
+        session['login_id'] = current_user.user_id
     logout_user()
     return redirect(url_for('index'))
 
@@ -134,14 +151,15 @@ def create_registration_code():
 
     if request.method == 'GET':
         csrf_token = generate_random_string(48)  # CSRF対策にランダムなシークレットキーを設定
-        session['registration_code_csrf_token'] = csrf_token
+        # session['registration_code_csrf_token'] = csrf_token
+        set_session_for_csrf_token('registration_code_csrf_token', csrf_token)
         return render_template('registration_code.html', csrf_token=csrf_token)
 
     data = request.get_json()
     csrf_token = data['csrf_token']
 
     # CSRFトークンのチェック
-    if not session['registration_code_csrf_token'] == csrf_token:
+    if get_session_for_csrf_token('registration_code_csrf_token') != csrf_token:
         # CSRF token is not valid, show an error message or redirect
         return jsonify({'registration_code': 'Invalid access.'}), 403  # 不正なアクセス
 
@@ -211,7 +229,8 @@ def register_user():
         if is_empty(registration_code):
             registration_code = generate_random_string(52)  # 存在しない登録コードを設定
         csrf_token = generate_random_string(48)  # CSRF対策にランダムなシークレットキーを設定
-        session['register_user_csrf_token'] = csrf_token
+        # session['register_user_csrf_token'] = csrf_token
+        set_session_for_csrf_token('register_user_csrf_token', csrf_token)
         session['registration_code'] = registration_code
         return render_template('register_user.html', csrf_token=csrf_token)
 
@@ -229,7 +248,7 @@ def register_user():
     ).order_by(RegistrationCode.issuing_time.desc()).first()
 
     # 登録コードおよびCSRFトークンのチェック
-    if not rs_registration_codes or not session['register_user_csrf_token'] == csrf_token:
+    if not rs_registration_codes or get_session_for_csrf_token('register_user_csrf_token') != csrf_token:
         dic = {}
         dic['main_error_message'] = 'Invalid access.'
         dic['login_id'] = 'Invalid access.'
@@ -264,7 +283,7 @@ def register_user():
         func.max(LoginUser.user_no).label('max_user_no')
     ).one_or_none()
     user_no = 1
-    if not rs:
+    if rs[0] is not None:
         user_no = user_no + rs.max_user_no
 
     app_logger.debug(f'@@@@@@@@@@ login_id={login_id}')
