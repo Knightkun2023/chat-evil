@@ -113,7 +113,7 @@ function get_translation_data() {
     }
 
     let timestamp = new Date().getTime();
-    fetch(`/translations.js?${timestamp}`)
+    fetch(REMOTE_URL + `/translations.js?${timestamp}`)
         .then(response => {
             if (!response.ok) {
                 fetchFailed = true;

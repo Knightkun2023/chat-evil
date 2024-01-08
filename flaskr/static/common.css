@@ -136,19 +136,18 @@ button.register, button.edit {
     text-decoration: none; /* 下線を消す */
 }
 
-/* .menu-content li a span {
-    display: inline-block;
-    margin: 0 auto;
-} */
-
-/* a:link, a:visited, a:hover, a:active {
-    text-decoration: none;
-} */
-
-.side-menu li a:active {
-    background-color: #ccc; /* 背景色を変更 */
+.menu-content li a:active {
+    background-color: #ffcccccc; /* 背景色を変更 */
     color: #333; /* テキストの色を変更 */
     transform: scale(0.95); /* 少し縮小させる */
+}
+
+.menu-content li.btn-logout {
+    background-color: #ddcccc;
+}
+
+.menu-content li.btn-logout a:active {
+    background-color: #ddbbbb;
 }
 
 .bg_red {
