@@ -194,40 +194,6 @@ $(document).ready(function() {
         $('#audioCredit').hide();
     }
 
-    // $('#save_system_prompt').click(function() {
-    //     var chat_uuid = $('#chat_uuid').val();
-    //     var updatedContent = $('#work_system_prompt').val();
-    //     $.ajax({
-    //         url: REMOTE_URL + '/chat_history/prompt',
-    //         type: 'POST',
-    //         contentType: 'application/json',
-    //         headers: {
-    //             'X-Chat-Url': window.location.href
-    //         },
-    //         data: JSON.stringify({
-    //             'chat_uuid': chat_uuid,
-    //             'content': updatedContent
-    //         }),
-    //         dataType: 'json',
-    //         beforeSend: function() {
-    //             // リクエスト開始時にローディングアイコンを表示
-    //             showLoadingIcon();
-    //         },
-    //         success: function(data) {
-    //         },
-    //         error: function(jqXHR, textStatus, errorThrown) {
-    //             console.error('Error', textStatus, errorThrown);
-    //             if (jqXHR.responseJSON) {
-    //                 showWarningMessage(jqXHR.status + ': ' + jqXHR.responseJSON.error.message, 20000);
-    //             }
-    //         },
-    //         complete: function(jqXHR, textStatus) {
-    //             // 処理完了後にローディングアイコンを非表示にする
-    //             hideLoadingIcon();
-    //         }
-    //     });
-    // });
-
     function saveSystemPromptHandler(e) {
         var chat_uuid = $('#chat_uuid').val();
         var updatedContent = $('#work_system_prompt').val();
@@ -377,35 +343,11 @@ $(document).ready(function() {
         $(document).on('click', '#undo_by_saved', undoBySaved);
         $(document).on('click', closeModalForSystemPrompt);
     });
-    // $('#customize-system-prompt').click(function(event){
-    //     event.stopPropagation();  // これを追加
-    //     $('#work_system_prompt').val($('#customized_prompt').val());
-    //     $("#system_prompt_modal").fadeIn(400);
-
-    //     $(document).click(function(e) {
-    //         let $target = $(e.target);
-    //         if(!$target.closest('#system_prompt_panel').length && $('#system_prompt_panel').is(":visible")) {
-    //             $('#customized_prompt').val($('#work_system_prompt').val());
-    //             $("#system_prompt_modal").fadeOut(400);
-    //         }
-    //     });
-    //     $(document).on('click', '#close_system_prompt_Panel', function() {
-    //         // 親要素を探す
-    //         const $modal = $(this).closest('#system_prompt_modal');
-    
-    //         if(!$modal.closest('#system_prompt_panel').length && $('#system_prompt_panel').is(":visible")) {
-    //             $('#customized_prompt').val($('#work_system_prompt').val());
-    //             $("#system_prompt_modal").fadeOut(400);
-    //         }
-    //     });
-    // });
 
     if ('prompt_content' in user_prompt) {
-        console.log('@@@@@@@@@@ if');
         $('#saved_user_prompt').val(user_prompt.prompt_content);
         $('#user_prompt_revision').val(user_prompt.revision);
     } else {
-        console.log('@@@@@@@@@@ else');
         $('#saved_user_prompt').val("");
         $('#user_prompt_revision').val("0");
     }
@@ -945,7 +887,7 @@ $(document).ready(function() {
         });
     }
 
-    $(document).on('click', '#btn_generate', function() {
+    function generateUserChat() {
         var chat_uuid = $('#chat_uuid').val();
         var model_id = $('#select_model').val();
         var content = $('#content_input').val();
@@ -997,7 +939,30 @@ $(document).ready(function() {
                 }
             }
         });
+    };
+
+    $('#btn_generate').on('click', function() {
+        chat_send_timer = setTimeout(function() {
+            if (!chat_click_prevent) {
+                // クリックイベントの処理
+                generateUserChat();
+            }
+            chat_click_prevent = false;
+        }, chat_click_delay);
+    }).on('dblclick', function(e) {
+        clearTimeout(chat_send_timer);
+        chat_click_prevent = true;
+
+        // 現在のモデルを取得
+        let current_model = document.getElementById('select_model').value;
+        // モデルの選択を一時的にGPT-4に変更
+        document.getElementById('select_model').value = '9';    // gpt-4-1106-preview
+        // チャット処理
+        generateUserChat();
+        // モデルの選択を元に戻す
+        document.getElementById('select_model').value = current_model;
     });
+
 });
 
 function playAudio(path) {
