@@ -27,6 +27,10 @@
                     <span class="fa-regular fa-hand-point-right button-icon"></span>
                     <span class="button-text">{{ _('continue') }}</span>
                 </div>
+                <div id="btn_generate" class="div-button">
+                    <span class="fa-solid fa-seedling button-icon"></span>
+                    <span class="button-text">{{ _('generate content') }}</span>
+                </div>
             </div>
         </div>
         <div id="setting_modal" class="modal">
@@ -74,20 +78,6 @@
 
                 <div class="setting-row d-flex flex-wrap">
                     <div class="panel-component p-c-w-31 d-inline-block">
-                        {{ _('Select System Prompt') }}
-                    </div>
-                    <div class="panel-component p-c-w-32 d-inline-block">
-                        <select id="systemPromptFile">
-                            <option value="">{{ _('(Default)') }}</option>
-                            {% for system_prompt_file in system_prompt_files %}
-                            <option value="{{ system_prompt_file }}">{{ system_prompt_file }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-
-                <div class="setting-row d-flex flex-wrap">
-                    <div class="panel-component p-c-w-31 d-inline-block">
                         {{ _('Custom System Prompt') }}
                     </div>
                     <div class="panel-component p-c-w-32 d-inline-block">
@@ -96,6 +86,17 @@
                         </div>
                         <button id="customize-system-prompt">Customize</button>
                         <input type="hidden" id="customized_prompt" value="">
+                    </div>
+                </div>
+
+                <div class="setting-row d-flex flex-wrap">
+                    <div class="panel-component p-c-w-31 d-inline-block">
+                        {{ _('User Prompt') }}
+                    </div>
+                    <div class="panel-component p-c-w-32 d-inline-block">
+                        <button id="edit-user-prompt">{{_('Edit')}}</button>
+                        <input type="hidden" id="saved_user_prompt" value="">
+                        <input type="hidden" id="user_prompt_revision" value="">
                     </div>
                 </div>
 
@@ -143,13 +144,17 @@
             <div id="system_prompt_panel">
                 <h3 class="mb-3">{{ _('System Prompt Panel') }}</h3>
                 <section>
+                    <select id="prompt_candidates">
+                    </select>
+                </section>
+                <section>
                     <textarea id="work_system_prompt"></textarea>
                 </section>
                 <section>
                     <button id="save_system_prompt">{{ _('Save Prompt') }}</button>
                     <button id="undo_by_default">{{ _('Undo by Default') }}</button>
                     <button id="undo_by_saved">{{ _('Undo by Saved') }}</button>
-                    <button id="close_system_prompt_Panel">{{ _('Close Panel') }}</button>
+                    <button id="close_system_prompt_panel">{{ _('Close Panel') }}</button>
                 </section>
             </div>
         </div>
@@ -191,6 +196,8 @@
     var chat_history_list = JSON.parse({{ serialized_json | default('[]') | tojson | safe }});
     var assistant_pic_url_list = JSON.parse({{ assistant_pic_url_list | default('[]') | tojson | safe }});
     var word_replasing_list = JSON.parse({{ word_replasing_list | default('[]') | tojson | safe }});
+    var system_prompt_list = JSON.parse({{ system_prompt_list | default('[]') | tojson | safe }});
+    var user_prompt = JSON.parse({{ user_prompt | default('[]') | tojson | safe }});
 </script>
     <script type="text/javascript" src="{{ url_for('static', filename='chatgpt.js') }}"></script>
 </html>

@@ -5,6 +5,8 @@ import string, random, tiktoken, uuid, re, logging
 from urllib.parse import urlparse, parse_qs
 from enum import Enum
 
+CHAT_NAME_NEW = '<New Chat>'
+
 class TimeConstants(Enum):
     ONE_YEAR = 60 * 60 * 24 * 365   # 1年の秒数
     THREE_HOURS = 60 * 60 * 3  # 3時間の秒数

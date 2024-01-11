@@ -33,7 +33,7 @@ app.jinja_env.filters['is_checked'] = is_checked
 app.jinja_env.filters['is_disabled'] = is_disabled
 
 # ルーティングをインポート
-from . import login, system_prompts, token_counter, moderation, translation_js, chat, test, chat2
+from . import login, system_prompts, token_counter, moderation, translation_js, chat, test, chat2, user_chat
 
 # 生成してあったwavファイルを削除する
 import glob

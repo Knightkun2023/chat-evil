@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-01-07 13:38+0900\n"
+"POT-Creation-Date: 2024-01-09 13:47+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -117,99 +117,103 @@ msgstr ""
 msgid "continue"
 msgstr ""
 
-#: templates/chatgpt.html:49
+#: templates/chatgpt.html:32
+msgid "generate content"
+msgstr ""
+
+#: templates/chatgpt.html:53
 msgid "Summarization?"
 msgstr ""
 
-#: templates/chatgpt.html:58
+#: templates/chatgpt.html:62
 msgid "audio"
 msgstr ""
 
-#: templates/chatgpt.html:77
+#: templates/chatgpt.html:81
 msgid "Select System Prompt"
 msgstr ""
 
-#: templates/chatgpt.html:81
+#: templates/chatgpt.html:85
 msgid "(Default)"
 msgstr ""
 
-#: templates/chatgpt.html:91
+#: templates/chatgpt.html:95
 msgid "Custom System Prompt"
 msgstr ""
 
-#: templates/chatgpt.html:104
+#: templates/chatgpt.html:108
 msgid "Word Replacing"
 msgstr ""
 
-#: templates/chatgpt.html:116
+#: templates/chatgpt.html:120
 msgid "Copy Messages"
 msgstr ""
 
-#: templates/chatgpt.html:119
+#: templates/chatgpt.html:123
 msgid "Assistant's Only"
 msgstr ""
 
-#: templates/chatgpt.html:120
+#: templates/chatgpt.html:124
 msgid "All"
 msgstr ""
 
-#: templates/chatgpt.html:126
+#: templates/chatgpt.html:130
 msgid "Select Face Pic"
 msgstr ""
 
-#: templates/chatgpt.html:130
+#: templates/chatgpt.html:134
 msgid "Save Pic"
 msgstr ""
 
-#: templates/chatgpt.html:131
+#: templates/chatgpt.html:135
 msgid "Attempt Pic Only"
 msgstr ""
 
-#: templates/chatgpt.html:132
+#: templates/chatgpt.html:136
 msgid "Deselect"
 msgstr ""
 
-#: templates/chatgpt.html:144
+#: templates/chatgpt.html:148
 msgid "System Prompt Panel"
 msgstr ""
 
-#: templates/chatgpt.html:149
+#: templates/chatgpt.html:153
 msgid "Save Prompt"
 msgstr ""
 
-#: templates/chatgpt.html:150
+#: templates/chatgpt.html:154
 msgid "Undo by Default"
 msgstr ""
 
-#: templates/chatgpt.html:151
+#: templates/chatgpt.html:155
 msgid "Undo by Saved"
 msgstr ""
 
-#: templates/chatgpt.html:152
+#: templates/chatgpt.html:156
 msgid "Close Panel"
 msgstr ""
 
-#: templates/chatgpt.html:158
+#: templates/chatgpt.html:162
 msgid "Word Replace Settings Panel"
 msgstr ""
 
-#: templates/chatgpt.html:164
+#: templates/chatgpt.html:168
 msgid "Which?"
 msgstr ""
 
-#: templates/chatgpt.html:165
+#: templates/chatgpt.html:169
 msgid "Browser"
 msgstr ""
 
-#: templates/chatgpt.html:166
+#: templates/chatgpt.html:170
 msgid "Server"
 msgstr ""
 
-#: templates/chatgpt.html:181
+#: templates/chatgpt.html:185
 msgid "Add Row"
 msgstr ""
 
-#: templates/chatgpt.html:182
+#: templates/chatgpt.html:186
 msgid "Save Word Replacing"
 msgstr ""
 

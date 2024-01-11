@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS chat_history (
     is_updated TINYINT NOT NULL DEFAULT 0,
     is_deleted TINYINT NOT NULL DEFAULT 0
 );
-CREATE INDEX idx_chat_history_chat_no ON chat_history (chat_no);
+CREATE INDEX IF NOT EXISTS idx_chat_history_chat_no ON chat_history (chat_no);
 
 CREATE TABLE IF NOT EXISTS chat_info (
     chat_no INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS chat_info (
     is_deleted TINYINT NOT NULL,
     deleted_time VARCHAR(17)
 );
-CREATE INDEX idx_chat_info_chat_uuid ON chat_info (chat_uuid);
+CREATE INDEX IF NOT EXISTS idx_chat_info_chat_uuid ON chat_info (chat_uuid);
 
 CREATE TABLE IF NOT EXISTS login_users (
     user_no INTEGER NOT NULL,
@@ -69,6 +69,7 @@ CREATE TABLE IF NOT EXISTS login_history (
 CREATE TABLE IF NOT EXISTS system_prompts (
     prompt_id INTEGER NOT NULL,
     revision INTEGER NOT NULL,
+    role_no INTEGER NOT NULL,
     prompt_name VARCHAR(50) NOT NULL,
     prompt_content TEXT NOT NULL,
     owner_user_no INTEGER NOT NULL,
@@ -111,4 +112,14 @@ CREATE TABLE IF NOT EXISTS word_replacings (
     is_deleted TINYINT NOT NULL,
     deleted_time VARCHAR(17)
 );
-CREATE INDEX idx_word_replacings_chat_no ON word_replacings (chat_no);
+CREATE INDEX IF NOT EXISTS idx_word_replacings_chat_no ON word_replacings (chat_no);
+
+CREATE TABLE IF NOT EXISTS chat_prompts (
+    chat_no INTEGER NOT NULL,
+    role_no INTEGER NOT NULL, 
+    revision INTEGER NOT NULL,
+    prompt_content TEXT NOT NULL,
+    user_no INTEGER NOT NULL,
+    updated_time VARCHAR(17) NOT NULL,
+    PRIMARY KEY (chat_no, role_no, revision)
+);

@@ -81,6 +81,11 @@ $(document).ready(function() {
         } else {
             $('#is_editable_by_everyone').prop('checked', false);
         }
+        if (data.SystemPrompts.role_no == 1) {
+            $('#role_no_user').prop('checked', true);
+        } else {
+            $('#role_no_assistant').prop('checked', true);
+        }
     }
     function set_readonly(data, is_readonly) {
         if (is_readonly || data.is_owner) {
@@ -122,6 +127,7 @@ $(document).ready(function() {
 
         var prompt_name = $('#prompt_name').val().trim();
         var prompt_content = simplemde.value();
+        var role_no = $('#role_no_user') ? ($('#role_no_user').prop('checked') ? "1": "2") : "2";
         var is_edit_locked = $('#is_edit_locked') ? ($('#is_edit_locked').prop('checked') ? "1": "0") : "0";
         var is_viewable_by_everyone = $('#is_viewable_by_everyone') ? ($('#is_viewable_by_everyone').prop('checked') ? "1": "0") : "0";
         var is_editable_by_everyone = $('#is_editable_by_everyone') ? ($('#is_editable_by_everyone').prop('checked') ? "1": "0") : "0";
@@ -152,6 +158,7 @@ $(document).ready(function() {
             data: JSON.stringify({
                 'prompt_name': prompt_name,
                 'prompt_content': prompt_content,
+                'role_no': role_no,
                 'is_edit_locked': is_edit_locked,
                 'is_viewable_by_everyone': is_viewable_by_everyone,
                 'is_editable_by_everyone': is_editable_by_everyone,

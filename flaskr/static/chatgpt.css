@@ -209,7 +209,8 @@ button {
 }
 
 #btn_continue.div-button {
-    display: flex;
+    /* display: flex; */
+    display: none;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -225,6 +226,31 @@ button {
 }
 
 #btn_continue.div-button:active {
+    background-color: #ff77ee; /* ボタンの背景色 */
+    /* -webkit-transform: translateY(4px);
+    transform: translateY(4px); */
+    -webkit-transform: translate(3px, 3px);
+    transform: translateY(3px, 3px);
+    border-bottom: none;
+}
+
+#btn_generate.div-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 76px; /* ボタンの幅 */
+    height: 76px; /* ボタンの高さ */
+    border-radius: 50%; /* ボタンを丸くする */
+    background-color: #ffaaff; /* ボタンの背景色 */
+    color: #ffffff; /* ボタンのテキスト色 */
+    font-size: 0.9rem; /* ボタンのテキストサイズ */
+    margin-left: -10px;
+    cursor: pointer;
+    border: 2px solid #dd33dd;
+}
+
+#btn_generate.div-button:active {
     background-color: #ff77ee; /* ボタンの背景色 */
     /* -webkit-transform: translateY(4px);
     transform: translateY(4px); */

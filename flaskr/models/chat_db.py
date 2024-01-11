@@ -82,3 +82,19 @@ class WordReplacing(db.Model):
     is_deleted: bool = db.Column(db.Boolean, nullable=False, default=False)
     # 削除フラグが設定された日時
     deleted_time: Optional[str] = db.Column(db.String(17), nullable=True)
+
+class ChatPrompts(db.Model):
+    __tablename__ = 'chat_prompts'
+
+    # チャット番号
+    chat_no = db.Column(db.Integer, primary_key=True)
+    # ロール種別。1: user, 2: assistant
+    role_no = db.Column(db.Integer, primary_key=True)
+    # リビジョン番号
+    revision = db.Column(db.Integer, primary_key=True)
+    # プロンプトの内容。
+    prompt_content = db.Column(db.Text, nullable=False)
+    # 最終編集者。このリビジョンを作った人
+    user_no = db.Column(db.Integer, nullable=False)
+    # 最終更新日時。このリビジョンの作成日時
+    updated_time = db.Column(db.String(17), nullable=False)

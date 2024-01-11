@@ -6,6 +6,7 @@ from sqlalchemy import func
 from sqlalchemy.orm import aliased
 from flask_login import login_required, current_user
 from .utils.commons import is_empty, generate_random_string, is_numeric, get_current_time, checkbox_to_save
+from .utils.commons_db import get_prompt_list
 from .utils.session_manager import set_session_for_csrf_token, get_session_for_csrf_token
 import json, logging
 
@@ -13,39 +14,7 @@ import json, logging
 @login_required
 def system_prompt_list():
 
-    # 閲覧ユーザのユーザ番号
-    current_user_no = current_user.user_no
-
-    # LoginUserテーブルのエイリアスを作成
-    owner_user = aliased(LoginUser, name="owner_user")
-    updated_user = aliased(LoginUser, name="updated_user")
-
-    # 各prompt_idの最大revisionを取得するサブクエリを作成
-    subquery = db.session.query(
-        SystemPrompts.prompt_id,
-        func.max(SystemPrompts.revision).label("max_revision")
-    ).group_by(SystemPrompts.prompt_id).subquery()
-
-    system_prompts = db.session.query(SystemPrompts, owner_user.user_name, updated_user.user_name, 
-                                      (SystemPrompts.owner_user_no == current_user_no).label("is_owner")).join(
-        subquery, 
-        db.and_(
-            SystemPrompts.prompt_id == subquery.c.prompt_id,
-            SystemPrompts.revision == subquery.c.max_revision
-        )
-    ).outerjoin(
-        owner_user,
-        owner_user.user_no == SystemPrompts.owner_user_no
-    ).outerjoin(
-        updated_user,
-        updated_user.user_no == SystemPrompts.updated_user_no
-    ).filter(
-        SystemPrompts.is_deleted == False,
-        db.or_(
-            SystemPrompts.owner_user_no == current_user_no,
-            SystemPrompts.is_viewable_by_everyone == True
-        )
-    ).order_by(SystemPrompts.updated_time.desc()).all()
+    system_prompts = get_prompt_list(current_user)
 
     return render_template("system_prompt_list.html", system_prompts=system_prompts)
 
@@ -108,6 +77,7 @@ def system_prompt_detail_show(prompt_id):
         'revision': system_prompt[0].revision,
         'prompt_name': system_prompt[0].prompt_name,
         'prompt_content': system_prompt[0].prompt_content,
+        'role_no': system_prompt[0].role_no,
         'is_edit_locked': system_prompt[0].is_edit_locked,
         'is_viewable_by_everyone': system_prompt[0].is_viewable_by_everyone,
         'is_editable_by_everyone': system_prompt[0].is_editable_by_everyone,
@@ -141,12 +111,17 @@ def system_prompt_detail():
     
     prompt_name = '' if not 'prompt_name' in data else data['prompt_name']
     prompt_content = '' if not 'prompt_content' in data else data['prompt_content']
+    role_no_str = '2' if not 'role_no' in data else data['role_no']
     is_edit_locked = '' if not 'is_edit_locked' in data else data['is_edit_locked']
     is_viewable_by_everyone = '' if not 'is_viewable_by_everyone' in data else data['is_viewable_by_everyone']
     is_editable_by_everyone = '' if not 'is_editable_by_everyone' in data else data['is_editable_by_everyone']
     prompt_id = '' if not 'prompt_id' in data else data['prompt_id']
     revision = '' if not 'revision' in data else data['revision']
     updated_time = '' if not 'updated_time' in data else data['updated_time']
+
+    role_no = 2
+    if role_no_str == '1':
+        role_no = 1
 
     # parameter check
     error_msgs = {}
@@ -182,6 +157,7 @@ def system_prompt_detail():
                     revision=1,
                     prompt_name=prompt_name,
                     prompt_content=prompt_content, 
+                    role_no=role_no,
                     is_edit_locked=checkbox_to_save(is_edit_locked),
                     is_viewable_by_everyone=checkbox_to_save(is_viewable_by_everyone),
                     is_editable_by_everyone=checkbox_to_save(is_editable_by_everyone),
@@ -238,6 +214,7 @@ def system_prompt_detail():
         if system_prompt.owner_user_no == current_user.user_no:
             # オーナーの場合に変更できる項目
             prompt.prompt_name = prompt_name
+            prompt.role_no=role_no
             prompt.is_edit_locked = checkbox_to_save(is_edit_locked)
             prompt.is_viewable_by_everyone = checkbox_to_save(is_viewable_by_everyone)
             prompt.is_editable_by_everyone = checkbox_to_save(is_editable_by_everyone)

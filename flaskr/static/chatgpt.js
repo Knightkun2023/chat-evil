@@ -194,7 +194,41 @@ $(document).ready(function() {
         $('#audioCredit').hide();
     }
 
-    $('#save_system_prompt').click(function() {
+    // $('#save_system_prompt').click(function() {
+    //     var chat_uuid = $('#chat_uuid').val();
+    //     var updatedContent = $('#work_system_prompt').val();
+    //     $.ajax({
+    //         url: REMOTE_URL + '/chat_history/prompt',
+    //         type: 'POST',
+    //         contentType: 'application/json',
+    //         headers: {
+    //             'X-Chat-Url': window.location.href
+    //         },
+    //         data: JSON.stringify({
+    //             'chat_uuid': chat_uuid,
+    //             'content': updatedContent
+    //         }),
+    //         dataType: 'json',
+    //         beforeSend: function() {
+    //             // リクエスト開始時にローディングアイコンを表示
+    //             showLoadingIcon();
+    //         },
+    //         success: function(data) {
+    //         },
+    //         error: function(jqXHR, textStatus, errorThrown) {
+    //             console.error('Error', textStatus, errorThrown);
+    //             if (jqXHR.responseJSON) {
+    //                 showWarningMessage(jqXHR.status + ': ' + jqXHR.responseJSON.error.message, 20000);
+    //             }
+    //         },
+    //         complete: function(jqXHR, textStatus) {
+    //             // 処理完了後にローディングアイコンを非表示にする
+    //             hideLoadingIcon();
+    //         }
+    //     });
+    // });
+
+    function saveSystemPromptHandler(e) {
         var chat_uuid = $('#chat_uuid').val();
         var updatedContent = $('#work_system_prompt').val();
         $.ajax({
@@ -226,16 +260,23 @@ $(document).ready(function() {
                 hideLoadingIcon();
             }
         });
-    });
+    }
 
-    $('#undo_by_default').click(function() {
+    // $('#undo_by_default').click(function() {
+    //     getSystemPrompt(mkuuid(), function(s) { $('#work_system_prompt').val(s); });
+    // });
+    function undoByDefault(e) {
         getSystemPrompt(mkuuid(), function(s) { $('#work_system_prompt').val(s); });
-    });
+    }
 
-    $('#undo_by_saved').click(function() {
+    // $('#undo_by_saved').click(function() {
+    //     var chat_uuid = $('#chat_uuid').val();
+    //     getSystemPrompt(chat_uuid, function(s) { $('#work_system_prompt').val(s); });
+    // });
+    function undoBySaved() {
         var chat_uuid = $('#chat_uuid').val();
         getSystemPrompt(chat_uuid, function(s) { $('#work_system_prompt').val(s); });
-    });
+    }
 
     const recognition = new webkitSpeechRecognition();
     recognition.lang = "ja";
@@ -265,6 +306,30 @@ $(document).ready(function() {
         appendContent(item.content, item.role, true, item.image_url, item.moderation, item.seq, item.model_name);
     }
 
+    if (system_prompt_list && system_prompt_list.length > 0) {
+        var $select = $('#prompt_candidates');
+        window.promptContents = {};
+        $select.append($('<option>').val("0").text(gettext('(default)')));
+        window.promptContents["0"] = "";
+        for (var i = 0; i < system_prompt_list.length; i++) {
+            var prompt_id = system_prompt_list[i].prompt_id;
+            var prompt_name = system_prompt_list[i].prompt_name;
+            var prompt_content = system_prompt_list[i].prompt_content;
+            $select.append($('<option>').val(prompt_id).text(prompt_name));
+            window.promptContents[prompt_id] = prompt_content;
+        }
+    }
+    $('#prompt_candidates').change(function() {
+        var prompt_id = $(this).val();
+        if (prompt_id === "0") {
+            $('#work_system_prompt').val($('#customized_prompt').val());
+        }
+        var prompt_content = window.promptContents[prompt_id];
+        if (prompt_content !== "") {
+            $('#work_system_prompt').val(prompt_content);
+        }
+    });
+
     $('#setting_button').click(function(event) {
         event.stopPropagation();  // これを追加
         $("#setting_modal").fadeIn(400);
@@ -285,27 +350,181 @@ $(document).ready(function() {
         });
     });
 
-    $('#customize-system-prompt').click(function(event){
-        event.stopPropagation();  // これを追加
-        $('#work_system_prompt').val($('#customized_prompt').val());
-        $("#system_prompt_modal").fadeIn(400);
+    function closeModalForSystemPrompt(e) {
+        let $target = $(e.target);
 
-        $(document).click(function(e) {
-            let $target = $(e.target);
-            if(!$target.closest('#system_prompt_panel').length && $('#system_prompt_panel').is(":visible")) {
-                $('#customized_prompt').val($('#work_system_prompt').val());
-                $("#system_prompt_modal").fadeOut(400);
-            }
-        });
-        $(document).on('click', '#close_system_prompt_Panel', function() {
-            // 親要素を探す
-            const $modal = $(this).closest('#system_prompt_modal');
+        // モーダル外のクリック、または特定のボタンのクリックの場合に処理
+        if(!$target.closest('#system_prompt_panel').length && $('#system_prompt_panel').is(":visible") || $target.is('#close_system_prompt_panel')) {
+            $('#customized_prompt').val($('#work_system_prompt').val());
+            $("#system_prompt_modal").fadeOut(400);
     
-            if(!$modal.closest('#system_prompt_panel').length && $('#system_prompt_panel').is(":visible")) {
-                $('#customized_prompt').val($('#work_system_prompt').val());
-                $("#system_prompt_modal").fadeOut(400);
+            // ハンドラを削除
+            $(document).off('click', '#save_system_prompt');
+            $(document).off('click', '#undo_by_default');
+            $(document).off('click', '#undo_by_saved');
+            $(document).off('click', closeModalForSystemPrompt);
+        }
+    }
+    $('#customize-system-prompt').click(function(event){
+        event.stopPropagation();
+        $('#work_system_prompt').val($('#customized_prompt').val());
+        $('#undo_by_default').show();
+        $("#system_prompt_modal").fadeIn(400);
+    
+        // 名前付き関数を使ってハンドラを設定
+        $(document).on('click', '#save_system_prompt', saveSystemPromptHandler);
+        $(document).on('click', '#undo_by_default', undoByDefault);
+        $(document).on('click', '#undo_by_saved', undoBySaved);
+        $(document).on('click', closeModalForSystemPrompt);
+    });
+    // $('#customize-system-prompt').click(function(event){
+    //     event.stopPropagation();  // これを追加
+    //     $('#work_system_prompt').val($('#customized_prompt').val());
+    //     $("#system_prompt_modal").fadeIn(400);
+
+    //     $(document).click(function(e) {
+    //         let $target = $(e.target);
+    //         if(!$target.closest('#system_prompt_panel').length && $('#system_prompt_panel').is(":visible")) {
+    //             $('#customized_prompt').val($('#work_system_prompt').val());
+    //             $("#system_prompt_modal").fadeOut(400);
+    //         }
+    //     });
+    //     $(document).on('click', '#close_system_prompt_Panel', function() {
+    //         // 親要素を探す
+    //         const $modal = $(this).closest('#system_prompt_modal');
+    
+    //         if(!$modal.closest('#system_prompt_panel').length && $('#system_prompt_panel').is(":visible")) {
+    //             $('#customized_prompt').val($('#work_system_prompt').val());
+    //             $("#system_prompt_modal").fadeOut(400);
+    //         }
+    //     });
+    // });
+
+    if ('prompt_content' in user_prompt) {
+        console.log('@@@@@@@@@@ if');
+        $('#saved_user_prompt').val(user_prompt.prompt_content);
+        $('#user_prompt_revision').val(user_prompt.revision);
+    } else {
+        console.log('@@@@@@@@@@ else');
+        $('#saved_user_prompt').val("");
+        $('#user_prompt_revision').val("0");
+    }
+
+    function getUserPrompt(chat_uuid, func) {
+        // Ajaxでシステムプロンプトを取得する。
+        $.ajax({
+            url: REMOTE_URL + '/chat_history/user_prompt',
+            type: 'GET',
+            contentType: 'application/json',
+            data: { chat_uuid: chat_uuid },
+            dataType: 'json',
+            success: function(data) {
+                // Assume that 'data' is an object and we want to extract 'content' from it
+                var result = data.result;
+                var prompt_content = data.prompt_content;
+                var user_prompt_revision = data.user_prompt_revision;
+                if (result !== true) {
+                    console.log("result is not true. data=" + JSON.stringify(data, null, 2));  // This will print the data as a nicely formatted JSON string
+                }
+
+                $('#saved_user_prompt').val(prompt_content);
+                $('#user_prompt_revision').val(user_prompt_revision);
+                func(prompt_content);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                //#contents_field
+                let undoLastChat = true;    // 送信したメッセージをテキストエリアに戻すか
+                if (textStatus === 'timeout') {
+                    console.error('Request timed out');
+                    // タイムアウト処理
+                    showWarningMessage('リクエストがタイムアウトしました。', 5000);
+                } else if (textStatus === 'parsererror') {
+                    console.error('Failed to parse JSON');
+                    // JSON解析エラーの処理
+                    showWarningMessage('レスポンスが不正です。', 5000);
+                } else if (textStatus === 'error') {
+                    // その他のエラー処理
+                    const response = JSON.parse(jqXHR.responseText);
+                    console.error('Server responded with:', response);
+                    showWarningMessage('エラーが発生しました。', 5000);
+                } else {
+                    console.error('Error', textStatus, errorThrown);
+                    // その他のエラー処理
+                    showWarningMessage('エラーが発生しました。', 5000);
+                }
             }
         });
+    }
+
+    function saveUserPromptHandler(e) {
+        var chat_uuid = $('#chat_uuid').val();
+        var updatedContent = $('#work_system_prompt').val();
+        var revision = $('#user_prompt_revision').val();
+        $.ajax({
+            url: REMOTE_URL + '/chat_history/user_prompt',
+            type: 'POST',
+            contentType: 'application/json',
+            headers: {
+                'X-Chat-Url': window.location.href
+            },
+            data: JSON.stringify({
+                'chat_uuid': chat_uuid,
+                'content': updatedContent,
+                'revision': revision,
+            }),
+            dataType: 'json',
+            beforeSend: function() {
+                // リクエスト開始時にローディングアイコンを表示
+                showLoadingIcon();
+            },
+            success: function(data) {
+                $('#saved_user_prompt').val(updatedContent);
+                $('#user_prompt_revision').val(parseInt(revision) + 1);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('Error', textStatus, errorThrown);
+                if (jqXHR.responseJSON) {
+                    showWarningMessage(jqXHR.status + ': ' + jqXHR.responseJSON.error.message, 20000);
+                }
+            },
+            complete: function(jqXHR, textStatus) {
+                // 処理完了後にローディングアイコンを非表示にする
+                hideLoadingIcon();
+            }
+        });
+    }
+
+    function undoBySavedForUserPromptHandler(e) {
+        var chat_uuid = $('#chat_uuid').val();
+        getUserPrompt(chat_uuid, function(s) { $('#work_system_prompt').val(s); });
+    }
+    
+    function closeModalForUserPrompt(e) {
+        let $target = $(e.target);
+
+        // モーダル外のクリック、または特定のボタンのクリックの場合に処理
+        if(!$target.closest('#system_prompt_panel').length && $('#system_prompt_panel').is(":visible") || $target.is('#close_system_prompt_panel')) {
+            $("#system_prompt_modal").fadeOut(400);
+    
+            // ハンドラを削除
+            $(document).off('click', '#save_system_prompt');
+            // $(document).off('click', '#undo_by_default');
+            $(document).off('click', '#undo_by_saved');
+            $(document).off('click', closeModalForUserPrompt);
+        }
+    }
+
+    $('#edit-user-prompt').click(function(event){
+        event.stopPropagation();
+        $('#work_system_prompt').val($('#saved_user_prompt').val());
+        $('#undo_by_default').hide();
+        $("#system_prompt_modal").fadeIn(400);
+    
+        // 名前付き関数を使ってハンドラを設定
+        $(document).on('click', '#save_system_prompt', saveUserPromptHandler);
+        // $(document).on('click', '#undo_by_default', undoByDefault);
+        $(document).on('click', '#undo_by_saved', undoBySavedForUserPromptHandler);
+        $(document).on('click', closeModalForUserPrompt);
     });
 
     $('#btn-word-replace-setting').click(function(event){
@@ -698,6 +917,87 @@ $(document).ready(function() {
             }
         });
     });
+
+    // ワード置換のテーブルを作成
+    if (word_replasing_list) {
+        word_replasing_list.forEach(record => {
+            var role = record.role;
+            var word_client = record.word_client;
+            var word_server = record.word_server;
+            var user_checked = "";
+            var assistant_checked = "";
+            if (role === "assistant") {
+                assistant_checked = "checked";
+            } else {
+                user_checked = "checked";
+            }
+
+            window.word_replace_row_count += 1;
+            var newRow = $('<tr class="form-row">' +
+                '<td><label><input type="radio" name="isAssistant_' + window.word_replace_row_count + '" class="is-assistant" value="user" ' + user_checked + '>User</label>&nbsp;' +
+                '<label><input type="radio" name="isAssistant_' + window.word_replace_row_count + '" class="is-assistant" value="assistant"' + assistant_checked + '>Assistant</label>' +
+                '<td><input type="text" name="keys[]" class="key-input" value="' + escapeHTML(word_client) + '"></td>' +
+                '<td><input type="text" name="values[]" class="value-input" value="' + escapeHTML(word_server) + '"></td>' +
+                '<td><i class="fa-solid fa-trash remove-row"></i></td>' +
+                '</tr>');
+    
+            $('#replace_pairs_form tbody').append(newRow);
+        });
+    }
+
+    $(document).on('click', '#btn_generate', function() {
+        var chat_uuid = $('#chat_uuid').val();
+        var model_id = $('#select_model').val();
+        var content = $('#content_input').val();
+        if (content === "8" || content === "9" || content === "1001") {
+            model_id = content;
+        }
+
+        $.ajax({
+            url: REMOTE_URL + '/user-chat',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ chat_uuid: chat_uuid, model_id: model_id }),
+            dataType: 'json',
+            success: function(data) {
+                // Assume that 'data' is an object and we want to extract 'content' from it
+                var result = data.result;
+                var content = data.content;
+
+                if (result) {
+                    $('#content_input').val(content).trigger('input');
+                } else {
+                    console.log("result is not true. data=" + JSON.stringify(data, null, 2));  // This will print the data as a nicely formatted JSON string
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                //#contents_field
+                let undoLastChat = true;    // 送信したメッセージをテキストエリアに戻すか
+                if (textStatus === 'timeout') {
+                    console.error('Request timed out');
+                    // タイムアウト処理
+                    showWarningMessage('リクエストがタイムアウトしました。', 5000);
+                } else if (textStatus === 'parsererror') {
+                    console.error('Failed to parse JSON');
+                    // JSON解析エラーの処理
+                    showWarningMessage('レスポンスが不正です。', 5000);
+                } else if (textStatus === 'error') {
+                    // その他のエラー処理
+                    const response = JSON.parse(jqXHR.responseText);
+                    console.error('Server responded with:', response);
+                    showWarningMessage('エラーが発生しました。', 5000);
+                    // メッセージがある場合はtextareaにappendする。
+                    let message = response["error"]["message"];
+                    let preText = "";
+                    $('#content_input').val(preText + message).trigger('input');
+                } else {
+                    console.error('Error', textStatus, errorThrown);
+                    // その他のエラー処理
+                    showWarningMessage('エラーが発生しました。', 5000);
+                }
+            }
+        });
+    });
 });
 
 function playAudio(path) {
@@ -862,7 +1162,6 @@ async function submitToServer(continueFlag = false) {
     var chat_uuid = $('#chat_uuid').val();
     var model_id = $('#select_model').val();
     var system_prompt = $('#customized_prompt').val();
-    let systemPromptFile = $('#systemPromptFile').val();
     if (inputText === "" && !continueFlag) {
         $('#content_input').focus();
         return;
@@ -880,7 +1179,7 @@ async function submitToServer(continueFlag = false) {
         url: REMOTE_URL + '/chat2',
         type: 'POST',
         contentType: 'application/json',
-        data: JSON.stringify({ chat_uuid: chat_uuid, chat_name: chat_name, content: sendText, model_id: model_id, system_prompt_file: systemPromptFile, system_prompt: system_prompt,
+        data: JSON.stringify({ chat_uuid: chat_uuid, chat_name: chat_name, content: sendText, model_id: model_id, system_prompt: system_prompt,
             continueFlag: continueFlag,
             audioOn: $('#audioOn').prop('checked') ? '1' : '0',
             is_summary_enabled: $('#summarizeOn').prop('checked') ? '1' : '0',
@@ -1061,8 +1360,10 @@ $('#btn_continue').on('click', function() {
     document.getElementById('select_model').value = current_model;
 });
 
-function setupNewChatUUID() {
-    var chat_uuid = mkuuid();
+function setupNewChatUUID(chat_uuid = '') {
+    if (chat_uuid === '') {
+        chat_uuid = mkuuid();
+    }
     $('#chat_uuid').val(chat_uuid);
     var newURL = REMOTE_URL + '/?chat_uuid=' + chat_uuid;
     history.pushState(null, null, newURL);
@@ -1074,12 +1375,12 @@ $('#btn_newchat').click(function() {
 
     setupNewChatUUID();
 
-    // ブラウザを再読み込みしする。
+    // ブラウザを再読み込みする。
     window.location.reload();
 });
 
 if (!document.location.href.includes('/?chat_uuid=')) {
-    setupNewChatUUID();
+    setupNewChatUUID($('#chat_uuid').val());
 }
 
 $('#copy-assistant-message').click(function(){

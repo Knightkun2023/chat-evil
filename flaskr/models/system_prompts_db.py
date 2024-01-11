@@ -7,6 +7,8 @@ class SystemPrompts(db.Model):
     prompt_id = db.Column(db.Integer, primary_key=True)
     # リビジョン番号
     revision = db.Column(db.Integer, primary_key=True)
+    # ロール種別。1: user, 2: assistant
+    role_no = db.Column(db.Integer, nullable=False)
     # プロンプト名。変更可能
     prompt_name = db.Column(db.String(30), nullable=False)
     # プロンプトの内容。

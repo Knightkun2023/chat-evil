@@ -1,8 +1,8 @@
 from flask import render_template, request, redirect, url_for, jsonify, session
 from . import app, db, voicevox
 from flask_login import login_required, current_user
-from .models.chat_db import ChatHistory, ChatInfo, WordReplacing
-from .utils.commons import is_empty, count_token, generate_random_string, is_valid_uuid, get_current_time, remove_control_characters, create_error_info, get_model_id, get_model_dict_by_id, get_model_dict_by_name, get_default_model, get_model_name_by_id, ALL_MODEL_ID
+from .models.chat_db import ChatHistory, ChatInfo
+from .utils.commons import is_empty, count_token, generate_random_string, is_valid_uuid, get_current_time, remove_control_characters, create_error_info, get_model_id, get_model_dict_by_id, get_model_dict_by_name, get_default_model, get_model_name_by_id, ALL_MODEL_ID, CHAT_NAME_NEW
 from .utils.moderation_commons import code_moderation_json, check_moderation_main, round_to_3rd_decimal, check_sorry_message
 import openai, json, logging, os, glob, uuid
 from sqlalchemy import func, desc
@@ -102,7 +102,7 @@ def chat2():
         moderation_result_list.append(result_val)
 
     if not is_valid_uuid(chat_uuid):
-        chat_uuid = uuid.uuid4()
+        chat_uuid = str(uuid.uuid4())
     if not is_positive_integer(speaker):
         speaker = "08"
     if '1' == is_summary_enabled:
@@ -116,7 +116,7 @@ def chat2():
         audioOn = False
 
     # チャット名が設定されていなかった場合、ユーザテキストから設定される
-    if is_empty(chat_name):
+    if is_empty(chat_name) or chat_name == CHAT_NAME_NEW:
         chat_name = remove_control_characters(user_text)
     if len(chat_name) > 30:
         chat_name = chat_name[:30]
@@ -145,10 +145,6 @@ def chat2():
     if is_empty(system_prompt):
         if is_system_prompt_file(system_prompt_file):
             system_prompt = readSystemPrompot(system_prompt_file)
-        else:
-            # 新規でない場合は最初のシステムプロンプトを使用するように変更。
-            if is_new_chat:
-                system_prompt = readSystemPrompot(app.config['SYSTEM_PROMPT'])
     else:
         if len(system_prompt) > app.config['SYSTEM_PROMPT_MAX_LENGTH']:
             return jsonify(result=False, error_message=f'システムプロンプトが長すぎます。len={len(system_prompt)}'), 400
@@ -157,7 +153,8 @@ def chat2():
     chat_history = ChatHistory.query.filter_by(chat_no=chat_no, is_deleted = False).order_by(ChatHistory.seq.asc()).all()
     # chat_history_list = [{'role': ch.role, 'content': ch.content} for ch in chat_history]
     chat_history_list = [{'role': ch.role, 'content': ch.content} if ch.name is not None else {'role': ch.role, 'content': ch.content} for ch in chat_history]
-
+    if len(chat_history_list) == 0:
+        is_new_chat = True
 
     # chat_history_listを末尾から"/hist"を探していく
     # 「/hist」を見つけるための変数を初期化
@@ -186,6 +183,9 @@ def chat2():
                     next_messages.insert(0, chat_history_list[i])
                 else:
                     is_over_token_limit = True
+    elif not system_prompt:
+        # 新規のチャットで、かつプロンプトが指定されていない場合、デフォルトのプロンプトを指定
+        system_prompt = readSystemPrompot(app.config['SYSTEM_PROMPT'])
 
     summary_message = None  # 要約がないことを明示的に示すためのワード。
     if found:
@@ -390,3 +390,33 @@ def chat2():
     # Return assistant message
     return jsonify(result=result, role='assistant', content=assistant_message_text, audio_path=audio_path, chat_name=chat_name, moderation_result=moderation_result_list,
                    image_url=image_url, assistant_seq=assistantSeq, user_seq=userSeq, model_name=response_model)
+
+@app.route('/chat/generate', methods=['POST'])
+@login_required
+def generate_content():
+    app_logger = logging.getLogger('app_logger')
+    response_code = 500
+
+    try:
+        # パラメータを受け取る
+        data = request.get_json()
+        chat_uuid = data['chat_uuid'] if 'chat_uuid' in data else ''
+        seq = data['seq'] if 'seq' in data else -1
+
+        proc_ok = True
+        if chat_uuid == '' or seq == -1:
+            app_logger.debug(f'/chat/generate にパラメータが正しく渡されていません。chat_uuid=[{chat_uuid}], seq=[{seq}]')
+            proc_ok = False
+
+        # chat_infoを取得。chat_uuid存在確認を含めて。
+        if proc_ok:
+            pass
+
+        # chat_historyを取得。seqの存在確認を含めて。
+        if proc_ok:
+            pass
+
+    except:
+        pass
+
+    return jsonify({}), response_code

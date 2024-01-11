@@ -24,6 +24,14 @@
                         <td colspan="2"><textarea id="prompt_content" class="prompt_editor"></textarea><br>
                             <span id="invalidate_prompt_content" class="error">&nbsp; </span></td>
                     </tr>
+                    <tr>
+                        <th class="w-25">{{_('Which role?')}}</th>
+                        <td>
+                            <label><input id="role_no_user" name="role_no" value="1" type="radio" >{{_('user')}}</label>
+                            &nbsp;
+                            <label><input id="role_no_assistant" name="role_no" value="2" type="radio" checked>{{_('assistant')}}</label>
+                        </td>
+                    </tr>
                     {% if system_prompt.is_owner %}
                     <tr>
                         <th class="w-25">{{_('This prompt is locked?')}}</th>

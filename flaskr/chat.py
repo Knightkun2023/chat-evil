@@ -1,8 +1,9 @@
 from flask import render_template, request, redirect, url_for, jsonify, session
 from . import app, db, voicevox
 from flask_login import login_required, current_user
-from .models.chat_db import ChatHistory, ChatInfo, WordReplacing
+from .models.chat_db import ChatHistory, ChatInfo, WordReplacing, ChatPrompts
 from .utils.commons import is_empty, count_token, generate_random_string, is_valid_uuid, get_current_time, remove_control_characters, create_error_info, get_model_id, get_model_dict_by_id, get_model_dict_by_name, get_default_model, get_model_name_by_id, ALL_MODEL_ID
+from .utils.commons_db import get_or_create_chat_info, get_prompt_list, get_chat_info
 from .utils.moderation_commons import code_moderation_json, check_moderation_main, round_to_3rd_decimal, check_sorry_message
 from openai import OpenAI
 import json, logging, os, glob, uuid
@@ -100,7 +101,7 @@ def chat():
         moderation_result_list.append(result_val)
 
     if not is_valid_uuid(chat_uuid):
-        chat_uuid = uuid.uuid4()
+        raise ValueError(f'引数のchat_uuidの形式が不正です。f[{chat_uuid}]')
     if not is_positive_integer(speaker):
         speaker = "08"
     if '1' == is_summary_enabled:
@@ -143,10 +144,6 @@ def chat():
     if is_empty(system_prompt):
         if is_system_prompt_file(system_prompt_file):
             system_prompt = readSystemPrompot(system_prompt_file)
-        else:
-            # 新規でない場合は最初のシステムプロンプトを使用するように変更。
-            if is_new_chat:
-                system_prompt = readSystemPrompot(app.config['SYSTEM_PROMPT'])
     else:
         if len(system_prompt) > app.config['SYSTEM_PROMPT_MAX_LENGTH']:
             return jsonify(result=False, error_message=f'システムプロンプトが長すぎます。len={len(system_prompt)}'), 400
@@ -184,6 +181,9 @@ def chat():
                     next_messages.insert(0, chat_history_list[i])
                 else:
                     is_over_token_limit = True
+    elif not system_prompt:
+        # 新規のチャットで、かつプロンプトが指定されていない場合、デフォルトのプロンプトを指定
+        system_prompt = readSystemPrompot(app.config['SYSTEM_PROMPT'])
 
     summary_message = None  # 要約がないことを明示的に示すためのワード。
     if found:
@@ -504,8 +504,9 @@ def get_system_prompt_for_chat_history():
         if chatInfo:
             # 既存のチャット履歴を返す
             chat_history = ChatHistory.query.filter_by(chat_no=chatInfo.chat_no, is_deleted=False).order_by(ChatHistory.seq.asc()).first()
-            system_prompt = chat_history.content
-        else:
+            if chat_history:
+                system_prompt = chat_history.content
+        if not system_prompt:
             system_prompt = readSystemPrompot(app.config['SYSTEM_PROMPT'])
         response_code = 200
         result_dict['result'] = True
@@ -571,6 +572,126 @@ def update_system_prompt_for_chat_history():
         # エラーの原因を取得
         error_message = str(e)
         result_dict = create_error_info(message = error_message, status = response_code, path = 'POST /chat_history/prompt', details=error_message)
+
+    return jsonify(result_dict), response_code
+
+def get_user_prompt_common(chat_uuid, role_no):
+    chatInfo = get_or_create_chat_info(chat_uuid=chat_uuid, user=current_user)
+
+    # 各prompt_idの最大revisionを取得するサブクエリを作成
+    subquery = db.session.query(
+        ChatPrompts.chat_no, ChatPrompts.role_no,
+        func.max(ChatPrompts.revision).label("max_revision")
+    ).filter(ChatPrompts.chat_no == chatInfo.chat_no, ChatPrompts.role_no == role_no
+    ).group_by(ChatPrompts.chat_no, ChatPrompts.role_no).subquery()
+
+    system_prompt = db.session.query(ChatPrompts).join(
+        subquery, 
+        db.and_(
+            ChatPrompts.chat_no == subquery.c.chat_no,
+            ChatPrompts.revision == subquery.c.max_revision
+        )
+    ).filter(
+        ChatPrompts.role_no == 1
+    ).order_by(ChatPrompts.updated_time.desc()).first()
+
+    return system_prompt
+
+@app.route('/chat_history/user_prompt', methods=['GET'])
+@login_required
+def get_user_prompt():
+    app_logger = logging.getLogger('app_logger')
+    chat_uuid = request.args.get('chat_uuid')
+    role_no = 1  # user
+
+    result_dict = {'result': False}
+    response_code = 500
+    try:
+        if chat_uuid:
+            user_prompt = get_user_prompt_common(chat_uuid, role_no)
+
+            response_code = 200
+            result_dict['result'] = True
+            result_dict['prompt_content'] = ''
+            result_dict['user_prompt_revision'] = 0
+            if user_prompt:
+                result_dict['prompt_content'] = user_prompt.prompt_content
+                result_dict['user_prompt_revision'] = user_prompt.revision
+
+            # 変更をコミット
+            db.session.commit()
+
+    except Exception as e:
+        app_logger.exception(f'GET /chat_history/user_prompt(chat_uuid={chat_uuid}) で例外が発生しました。')
+        # エラーの原因を取得
+        error_message = str(e)
+        response_code = 500
+        result_dict = create_error_info(message = error_message, status = response_code, path = 'GET /chat_history/user_prompt', details=error_message)
+
+    return jsonify(result_dict), response_code
+
+@app.route('/chat_history/user_prompt', methods=['POST'])
+@login_required
+def update_user_prompt():
+    app_logger = logging.getLogger('app_logger')
+    result_dict = {'result': False}
+    response_code = 500
+
+    # パラメータを受け取る
+    data = request.get_json()
+    chat_uuid = data['chat_uuid'] if 'chat_uuid' in data else ''
+    revision = data['revision'] if 'revision' in data else '0'
+    content = data['content'] if 'content' in data else ''
+    role_no = 1  # user
+    if not chat_uuid or not content or not revision.isdigit() or int(revision) < 0:
+        response_code = 400
+        error_message = 'Invalid parameter.'
+        result_dict = create_error_info(message = error_message, status = response_code, path = 'POST /chat_history/user_prompt', details=error_message)
+        return jsonify(result_dict), response_code
+
+    try:
+        revision = int(revision)
+        response_code = 500 # デフォルトのレスポンスコード
+
+        # チャット情報の取得
+        chatInfo = None
+        if chat_uuid:
+            chatInfo = get_or_create_chat_info(chat_uuid=chat_uuid, user=current_user)
+        else:
+            # まだチャットが開始されていない場合、何もせず正常終了する。
+            response_code = 200
+            return jsonify(result_dict), response_code
+
+        if chatInfo:
+            user_prompt = get_user_prompt_common(chat_uuid, role_no)
+
+            if (user_prompt and user_prompt.revision == revision) or (not user_prompt and revision == 0):
+                updated_user_prompt = ChatPrompts(
+                    chat_no=chatInfo.chat_no,
+                    role_no=role_no,
+                    revision=revision + 1,
+                    prompt_content=content, 
+                    user_no=current_user.user_no,
+                    updated_time=get_current_time())
+
+                db.session.add(updated_user_prompt)
+
+                # 変更をコミット
+                db.session.commit()
+
+                response_code = 200
+                result_dict['result'] = True
+
+        else:
+            error_message = f'User Promptの更新時にChat情報が取得できませんでした。(chat_uuid={chat_uuid})'
+            app_logger.warn(error_message)
+            result_dict = create_error_info(message = error_message, status = response_code, path = 'POST /chat_history/user_prompt', details=error_message)
+
+    except Exception as e:
+        app_logger.exception(f'POST /chat_history/user_prompt(chat_uuid={chat_uuid}) で例外が発生しました。')
+        # エラーの原因を取得
+        error_message = str(e)
+        result_dict = create_error_info(message = error_message, status = response_code, path = 'POST /chat_history/user_prompt', details=error_message)
 
     return jsonify(result_dict), response_code
 
@@ -690,7 +811,8 @@ def save_word_replace():
         if val != None:
             is_assistants.append(val)
         index = index + 1
-        
+
+    app_logger.debug('@@@@@@@@@@ is_assistants=' + str(is_assistants))        
     if len(is_assistants) != size:
         # エラー
         error_message = 'is_assistantが正しく取得できませんでした。'
@@ -698,9 +820,58 @@ def save_word_replace():
         result_dict = create_error_info(message = error_message, status = response_code, path = 'POST /chat_history/word-replace', details=error_message)
         return jsonify(result_dict), response_code
 
-    # TODO テーブルに保存する
-
     try:
+        chatInfo = get_or_create_chat_info(chat_uuid, current_user)
+        app_logger.debug(f'@@@@@@@@@@ chat_no=[{chatInfo.chat_no}]')  
+        word_replacings = WordReplacing.query.filter_by(chat_no=chatInfo.chat_no, is_deleted=False).order_by(WordReplacing.seq.asc()).all()
+        for record in word_replacings:
+            # このレコードの情報
+            role = 'assistant' if record.is_assistant == 1 else 'user'
+            word_client = record.word_client
+            word_server = record.word_server
+            app_logger.debug(f'@@@@@@@@@@ server: role=[{role}], word_client=[{word_client}], word_server=[{word_server}]')   
+
+            # パラメータのレコードと一致するか
+            is_match = False
+            for i in range(0, size):
+                p_role = is_assistants[i]
+                p_word_client = keys[i]
+                p_word_server = values[i]
+                app_logger.debug(f'@@@@@@@@@@ parameter: p_role=[{p_role}], p_word_client=[{p_word_client}], p_word_server=[{p_word_server}]')   
+
+                if role == p_role and word_client == p_word_client and word_server == p_word_server:
+                    app_logger.debug(f'@@@@@@@@@@ MATCH!!!!!')   
+                    is_match = True
+                    is_assistants[i] = 'duplicated'
+                    break
+
+            if not is_match:
+                # レコードを削除
+                record.is_deleted = True
+                record.delete_time = get_current_time()
+                db.session.add(record)
+                app_logger.debug(f'@@@@@@@@@@ server not match, delete!: role=[{role}], word_client=[{word_client}], word_server=[{word_server}]')   
+
+        for i in range(0, size):
+            p_role = is_assistants[i]
+            p_word_client = keys[i]
+            p_word_server = values[i]
+
+            if p_role != 'duplicated':
+                # パラメータを登録
+                p_record = WordReplacing(
+                    chat_no=chatInfo.chat_no,
+                    is_assistant=1 if p_role == 'assistant' else 0,
+                    word_client=p_word_client,
+                    word_server=p_word_server, 
+                    user_no=current_user.user_no,
+                    updated_time=get_current_time(),
+                    is_deleted=False)
+                db.session.add(p_record)
+                app_logger.debug(f'@@@@@@@@@@ parameter not match, insert!!: p_role=[{p_role}], p_word_client=[{p_word_client}], p_word_server=[{p_word_server}]')   
+
+        db.session.commit()
+        app_logger.debug(f'@@@@@@@@@@ Commit, OK!')   
         result_dict['result'] = True
         response_code = 200
     
@@ -716,6 +887,7 @@ def save_word_replace():
 @app.route('/')
 @login_required
 def index():
+    app_logger = logging.getLogger('app_logger')
 
     # VOICEVOXのspeaker番号を取得する
     voicevoxProtocol = app.config['VOICEVOX_PROTOCOL']
@@ -747,28 +919,26 @@ def index():
         if not image_url:
             image_url = url_for('static', filename=f'faces/{app.config["DEFAULT_ASSISTANT_PIC"]}')
         chat_history_list = [{'role': ch.role, 'content': ch.content, 'image_url': image_url if 'assistant' == ch.role else '', 'moderation': ch.moderation_color, 'seq': ch.seq, 'model_name': get_model_name_by_id(ch.model_id)} for ch in chat_history]
-        chat_history_list.pop(0)  # 先頭のシステムプロンプトを削除
+        if len(chat_history_list) > 0:
+            chat_history_list.pop(0)  # 先頭のシステムプロンプトを削除
+            # 最後のチャットのモデルを取得する
+            current_model_id = chat_history[-1].model_id
+            if current_model_id != None:
+                model_id = current_model_id
         chat_name = chatInfo.chat_name
         chat_no = chatInfo.chat_no
-        # 最後のチャットのモデルを取得する
-        current_model_id = chat_history[-1].model_id
-        if current_model_id != None:
-            model_id = current_model_id
 
         # ワード置換データを取得する
         word_replasings = WordReplacing.query.filter_by(chat_no=chatInfo.chat_no, is_deleted=False).order_by(WordReplacing.seq.asc()).all()
         word_replasing_list = [{'role': 'assistant' if record.is_assistant == 1 else 'user', 'word_client': record.word_client, 'word_server': record.word_server} for record in word_replasings]
-    else:
+    elif not chat_uuid:
         # ランダムなUUIDを生成
-        chat_uuid = uuid.uuid4()
+        chat_uuid = str(uuid.uuid4())
 
     chat_history_list = json.dumps(chat_history_list, default=str)
 
     # モデルの一覧を取得
     model_dict = {item['id']: item['model_name'] for item in ALL_MODEL_ID if item['enabled']}
-
-    # システムプロンプトファイルのタイトルを読み込む
-    md_files = list_md_files()
 
     # 顔写真のURLのリストを取得する
     image_urls = get_face_file_path_list(reverse=True)
@@ -776,9 +946,28 @@ def index():
 
     word_replasing_list = json.dumps(word_replasing_list, default=str)
 
+    system_prompts = get_prompt_list(current_user)
+    system_prompts = [{'prompt_id': prompt.prompt_id, 'prompt_name': prompt.prompt_name, 'prompt_content': prompt.prompt_content} for prompt, x, y, z in system_prompts ]
+    system_prompts = json.dumps(system_prompts, default=str)
+
+    user_prompt = get_user_prompt_common(chat_uuid, 1)
+    if user_prompt:
+        # シリアル化可能な形に変換
+        user_prompt = {
+            'chat_no': user_prompt.chat_no,
+            'role_no': user_prompt.role_no,
+            'revision': user_prompt.revision,
+            'prompt_content': user_prompt.prompt_content,
+            'updated_time': user_prompt.updated_time
+        }
+    else:
+        user_prompt = {}
+    app_logger.debug(f'user_prompt: chat_uuid=[{chat_uuid}], user_prompt=[{str(user_prompt)}]')
+    user_prompt = json.dumps(user_prompt, default=str)
+
     return render_template(
-        'chatgpt.html', speakers=speakers, chat_no=chat_no, chat_uuid=chat_uuid, chat_name=chat_name, serialized_json=chat_history_list, model_id=model_id, system_prompt_files=md_files, model_dict=model_dict,
-        assistant_pic_url_list=image_urls, word_replasing_list=word_replasing_list
+        'chatgpt.html', speakers=speakers, chat_no=chat_no, chat_uuid=chat_uuid, chat_name=chat_name, serialized_json=chat_history_list, model_id=model_id, model_dict=model_dict,
+        assistant_pic_url_list=image_urls, word_replasing_list=word_replasing_list, system_prompt_list=system_prompts, user_prompt=user_prompt
     )
 
 @app.route('/chat/list', methods=['GET'])
@@ -912,7 +1101,8 @@ def chat_assistant_image_update():
     result_dict = {}
     result_dict['result'] = False
     try:
-        chatInfo = ChatInfo.query.filter_by(chat_uuid=chat_uuid, user_no=current_user.user_no).first()
+        # chatInfo = ChatInfo.query.filter_by(chat_uuid=chat_uuid, user_no=current_user.user_no).first()
+        chatInfo = get_or_create_chat_info(chat_uuid=chat_uuid, user=current_user)
         if chatInfo:
             chatInfo.assistant_pic_url = image_url
             chatInfo.updated_time = get_current_time()
